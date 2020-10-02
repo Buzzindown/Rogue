@@ -37,30 +37,34 @@ public class Room  {
    ArrayList<String> itemNames = new ArrayList<>();
    ArrayList<String> itemTypes = new ArrayList<>();
    ArrayList<Integer> barcode = new ArrayList<>();
+   ArrayList<Item> tempItems = new ArrayList<>();
 
    setId(Integer.decode(jsonRooms.get("id").toString()));
    setHeight(Integer.decode(jsonRooms.get("height").toString()));
    setWidth(Integer.decode(jsonRooms.get("width").toString()));
-   for(Object doors : (JSONArray) jsonRooms.get("doors")){
+/*   for(Object doors : (JSONArray) jsonRooms.get("doors")){
      JSONObject jsonDoors = (JSONObject)doors;
      String dir = jsonDoors.get("dir").toString();
      Integer pos = Integer.decode(jsonDoors.get("id").toString());
-  //   setDoors(dir, pos, i);
+     DoorDir.add(dir);
+     DoorPos.add(pos);
      i++;
-   }
+   }*/
 
    for(Object loot : (JSONArray) jsonRooms.get("loot")){
      JSONObject jsonLoot = (JSONObject)loot;
-     Point point = new Point();
+
      Integer x = Integer.decode(jsonLoot.get("x").toString());
      Integer y = Integer.decode(jsonLoot.get("y").toString());
-                  System.out.println("fuck" + c);
-     ItemID.add(c,Integer.decode(jsonLoot.get("id").toString()));
-
-     point.setLocation(x, y);
-     tempLoc.add(c,point);
+     Integer tempID = Integer.decode(jsonLoot.get("id").toString());
+     Point point = new Point(x,y);
+     Item temp = new Item(tempID, "null", "null", point );
+     tempItems.add(temp);
      c++;
    }
+
+   setRoomItems(tempItems);
+
 /*   for(Object items : (JSONArray) jsonRooms.get("items")){
      JSONObject jsonItems = (JSONObject)items;
      barcode.set(z,Integer.decode(jsonItems.get("id").toString()));
@@ -86,11 +90,6 @@ public class Room  {
 
 
    // Required getter and setters below
-public void setDoors(String direction, int position, int index){
-    DoorDir.set(index,direction);
-    DoorPos.set(index,position);
-}
-
  public int getWidth() {
 
 return width;
@@ -150,13 +149,38 @@ width = newWidth;
 
  }
 
+ public void printInfo(){
+   int i = 0;
+   System.out.println("Room id: " + id);
+   System.out.println("height: " + height);
+   System.out.println("width: " + width);
+/*   int sizeA = DoorPos.size();
+   for(i=0; i< sizeA;i++ ){
+     System.out.println("Door : " + i + " at position " + DoorPos.get(i) + " facing " + DoorDir.get(i));
+
+   }*/
+   int sizeB = RoomItems.size();
+   if(sizeB > 0){
+     for(i=0; i < sizeB; i++){
+       Item temp = RoomItems.get(i);
+       Point p = temp.getXyLocation();
+       System.out.println("Item id: " + temp.getId() + " at position " + p.getX() + "," + p.getY());
+     }
+   }else{
+     System.out.println("No loot in this room");
+   }
+
+   System.out.println();
+ }
+
 /*
 direction is one of NSEW
 location is a number between 0 and the length of the wall
 */
 
 public void setDoor(String direction, int location){
-
+  DoorDir.add(direction);
+  DoorPos.add(location);
 }
 
 

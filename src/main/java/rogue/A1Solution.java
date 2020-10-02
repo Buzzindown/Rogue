@@ -40,14 +40,15 @@ public class A1Solution{
             int x = 0;
             for(Object o : roomsArr){
               JSONObject oneRoom = (JSONObject)o;
-              System.out.println(oneRoom.get("id").toString());
               Room newRoom = new Room(oneRoom);
               roomsList.add(x,newRoom);
               x++;
             }
 
-            Room temp = roomsList.get(0);
-            System.out.println("we did it " + temp.getWidth());
+            for(x = 0; x<roomsList.size();x++){
+              roomsList.get(x).printInfo();
+            }
+
 
 
 
@@ -61,7 +62,6 @@ public class A1Solution{
         }
 
 // instantiate a new Rogue object and call methods to do the required things
-        System.out.println("We have liftoff!");
       //  Rogue rogue = new Rogue();
       //  Room testRoom = new Room();
       //  testRoom.setWidth(10);

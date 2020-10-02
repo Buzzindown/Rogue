@@ -6,13 +6,13 @@ import java.awt.Point;
  */
 public class Item  {
 
-  Integer id;
-  Room curRoom;
-  String name;
-  String type;
-  Point xyLocation;
-  Character displayCharacter;
-  String description;
+  private Integer identif;
+  private Room curRoom;
+  private String name;
+  private String type;
+  private Point xyLocation;
+  private Character displayCharacter;
+  private String description;
 
 
     //Constructors
@@ -31,13 +31,12 @@ public class Item  {
 
 
     public int getId() {
-        return id;
-
+        return identif;
     }
 
 
     public void setId(int id) {
-        id = id;
+        identif = id;
     }
 
 
