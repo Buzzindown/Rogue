@@ -16,26 +16,31 @@ import org.json.simple.parser.ParseException;
 
 public class Rogue{
 
-    public void setPlayer(Player thePlayer){
+    Player player;
+    String symbolsFilename;
+    ArrayList<Room> rooms;
+    ArrayList<Item> items;
 
+    public void setPlayer(Player thePlayer){
+      player = thePlayer;
     }
 
 
     public void setSymbols(String filename){
-
+      symbolsFilename = filename;
     }
 
     public ArrayList<Room> getRooms(){
-        return null;
+        return rooms;
 
     }
 
     public ArrayList<Item> getItems(){
-        return null;
+        return items;
 
     }
     public Player getPlayer(){
-        return null;
+        return player;
 
     }
 

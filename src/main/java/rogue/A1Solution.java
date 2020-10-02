@@ -16,15 +16,15 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 
+
 public class A1Solution{
-
-
 
 
     public static void main(String[] args) {
         // Hardcoded configuration file location/name
         String configurationFileLocation = "fileLocations.json";  //please don't change this for this version of the assignment
 
+        ArrayList<Room> roomsList = new ArrayList<>();
  // reading the input file locations using the configuration file
         JSONParser parser = new JSONParser();
         try {
@@ -32,11 +32,24 @@ public class A1Solution{
             Object obj = parser.parse(new FileReader(configurationFileLocation));
             JSONObject configurationJSON = (JSONObject) obj;
 
-            // Extract the Rooms value from the file to get the file location for rooms
-          
+            // getting our room filename and making it a jsonobject
+            Object obj2 = parser.parse(new FileReader(configurationJSON.get("Rooms").toString()));
+            JSONObject rooms = (JSONObject) obj2;
+
+            JSONArray roomsArr = (JSONArray) rooms.get("room");
+            int x = 0;
+            for(Object o : roomsArr){
+              JSONObject oneRoom = (JSONObject)o;
+              System.out.println(oneRoom.get("id").toString());
+              Room newRoom = new Room(oneRoom);
+              roomsList.add(x,newRoom);
+              x++;
+            }
+
+            Room temp = roomsList.get(0);
+            System.out.println("we did it " + temp.getWidth());
 
 
-            // Extract the Symbols value from the file to get the file location for symbols-map
 
 
         } catch(FileNotFoundException e) {
@@ -49,19 +62,10 @@ public class A1Solution{
 
 // instantiate a new Rogue object and call methods to do the required things
         System.out.println("We have liftoff!");
-        Rogue rogue = new Rogue();
-        Room testRoom = new Room();
-        testRoom.setWidth(10);
-        System.out.println(testRoom.getWidth());
+      //  Rogue rogue = new Rogue();
+      //  Room testRoom = new Room();
+      //  testRoom.setWidth(10);
+      //  System.out.println(testRoom.getWidth());
     }
-
-    public void parseRooms(JSONObject jsonRooms){
-
-    }
-
-    public void parseSymbols(JSONObject jsonSymbols){
-
-    }
-
 
 }

@@ -6,11 +6,13 @@ import java.awt.Point;
  */
 public class Item  {
 
-  int id;
+  Integer id;
   Room curRoom;
   String name;
   String type;
   Point xyLocation;
+  Character displayCharacter;
+  String description;
 
 
     //Constructors
@@ -61,24 +63,24 @@ public class Item  {
 
 
     public Character getDisplayCharacter() {
-        return null;
+        return displayCharacter;
 
     }
 
 
     public void setDisplayCharacter(Character newDisplayCharacter) {
-
+      displayCharacter = newDisplayCharacter;
     }
 
 
     public String getDescription() {
-        return null;
+        return description;
 
     }
 
 
     public void setDescription(String newDescription) {
-
+      description = newDescription;
     }
 
 

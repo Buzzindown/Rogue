@@ -12,13 +12,13 @@ import org.json.simple.parser.JSONParser;
  * doors out, etc.
  */
 public class Room  {
-  int width;
-  int height;
-  int id;
-  ArrayList<Item> RoomItems;
-  ArrayList<String> DoorDir;
-  ArrayList<Integer> DoorPos;
-  Player player;
+  private int width;
+  private int height;
+  private int id;
+  private ArrayList<Item> RoomItems;
+  private ArrayList<String> DoorDir;
+  private ArrayList<Integer> DoorPos;
+  private Player player;
 
 
 
@@ -45,20 +45,23 @@ public class Room  {
      JSONObject jsonDoors = (JSONObject)doors;
      String dir = jsonDoors.get("dir").toString();
      Integer pos = Integer.decode(jsonDoors.get("id").toString());
-     setDoors(dir, pos, i);
+  //   setDoors(dir, pos, i);
      i++;
    }
+
    for(Object loot : (JSONArray) jsonRooms.get("loot")){
      JSONObject jsonLoot = (JSONObject)loot;
      Point point = new Point();
      Integer x = Integer.decode(jsonLoot.get("x").toString());
      Integer y = Integer.decode(jsonLoot.get("y").toString());
-     ItemID.set(c,Integer.decode(jsonLoot.get("id").toString()));
+                  System.out.println("fuck" + c);
+     ItemID.add(c,Integer.decode(jsonLoot.get("id").toString()));
+
      point.setLocation(x, y);
-     tempLoc.set(c,point);
+     tempLoc.add(c,point);
      c++;
    }
-   for(Object items : (JSONArray) jsonRooms.get("items")){
+/*   for(Object items : (JSONArray) jsonRooms.get("items")){
      JSONObject jsonItems = (JSONObject)items;
      barcode.set(z,Integer.decode(jsonItems.get("id").toString()));
      itemNames.set(z,jsonItems.get("name").toString());
@@ -76,7 +79,7 @@ public class Room  {
      tempList.set(u,item);
    }
    setRoomItems(tempList);
-
+*/
  }
 
 
