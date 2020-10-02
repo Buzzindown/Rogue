@@ -32,12 +32,12 @@ public class Room  {
     int c = 0;
     int z = 0;
     int u = 0;
-   ArrayList<Point> tempLoc;
-   ArrayList<Integer> ItemID;
-   ArrayList<String> itemNames;
-   ArrayList<String> itemTypes;
-   ArrayList<Integer> barcode;
-   
+   ArrayList<Point> tempLoc = new ArrayList<>();
+   ArrayList<Integer> ItemID = new ArrayList<>();
+   ArrayList<String> itemNames = new ArrayList<>();
+   ArrayList<String> itemTypes = new ArrayList<>();
+   ArrayList<Integer> barcode = new ArrayList<>();
+
    setId(Integer.decode(jsonRooms.get("id").toString()));
    setHeight(Integer.decode(jsonRooms.get("height").toString()));
    setWidth(Integer.decode(jsonRooms.get("width").toString()));
@@ -66,7 +66,7 @@ public class Room  {
      z++;
    }
 
-   ArrayList<Item> tempList;
+   ArrayList<Item> tempList = new ArrayList<>();
    for(u = 0; u < ItemID.size(); u++){
      Integer identification = ItemID.get(u);
      String name = itemNames.get(identification-1);
