@@ -19,6 +19,10 @@ public class Room  {
   private ArrayList<String> DoorDir;
   private ArrayList<Integer> DoorPos;
   private Player player;
+  private int DN;
+  private int DE;
+  private int DS;
+  private int DW;
 
 
 
@@ -32,6 +36,10 @@ public class Room  {
     int c = 0;
     int z = 0;
     int u = 0;
+    DN = 0;
+    DE = 0;
+    DS = 0;
+    DW = 0;
    ArrayList<Point> tempLoc = new ArrayList<>();
    ArrayList<Integer> ItemID = new ArrayList<>();
    ArrayList<String> itemNames = new ArrayList<>();
@@ -42,14 +50,13 @@ public class Room  {
    setId(Integer.decode(jsonRooms.get("id").toString()));
    setHeight(Integer.decode(jsonRooms.get("height").toString()));
    setWidth(Integer.decode(jsonRooms.get("width").toString()));
-/*   for(Object doors : (JSONArray) jsonRooms.get("doors")){
+   for(Object doors : (JSONArray) jsonRooms.get("doors")){
      JSONObject jsonDoors = (JSONObject)doors;
      String dir = jsonDoors.get("dir").toString();
      Integer pos = Integer.decode(jsonDoors.get("id").toString());
-     DoorDir.add(dir);
-     DoorPos.add(pos);
+     setDoor(dir, pos);
      i++;
-   }*/
+   }
 
    for(Object loot : (JSONArray) jsonRooms.get("loot")){
      JSONObject jsonLoot = (JSONObject)loot;
@@ -154,16 +161,26 @@ width = newWidth;
    System.out.println("Room id: " + id);
    System.out.println("height: " + height);
    System.out.println("width: " + width);
-/*   int sizeA = DoorPos.size();
-   for(i=0; i< sizeA;i++ ){
-     System.out.println("Door : " + i + " at position " + DoorPos.get(i) + " facing " + DoorDir.get(i));
+   System.out.println("Doors ... ");
+   if(DN > 0){
+     System.out.println("North door @ pos : " + DN);
+   }
+   if(DE > 0){
+     System.out.println("East door @ pos : " + DE);
+   }
+   if(DS > 0){
+     System.out.println("South door @ pos : " + DS);
+   }
+   if(DW > 0){
+     System.out.println("West door @ pos : " + DW);
+   }
 
-   }*/
    int sizeB = RoomItems.size();
    if(sizeB > 0){
      for(i=0; i < sizeB; i++){
        Item temp = RoomItems.get(i);
        Point p = temp.getXyLocation();
+
        System.out.println("Item id: " + temp.getId() + " at position " + p.getX() + "," + p.getY());
      }
    }else{
@@ -179,8 +196,15 @@ location is a number between 0 and the length of the wall
 */
 
 public void setDoor(String direction, int location){
-  DoorDir.add(direction);
-  DoorPos.add(location);
+  if(direction.equals("N")){
+    DN = location;
+  }else if(direction.equals("E")){
+    DE = location;
+  }else if(direction.equals("S")){
+    DS = location;
+  }else if(direction.equals("W")){
+    DW = location;
+  }
 }
 
 
