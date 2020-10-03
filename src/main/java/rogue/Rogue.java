@@ -81,8 +81,16 @@ public class Rogue{
       roomZ = roomies;
     }
     public String displayAll(){
-        //creates a string that displays all the rooms in the dungeon
-        return null;
+        int x = 0;
+        String str = "";
+        String temp;
+        for(x = 0; x<roomZ.size();x++){
+          Room room = roomZ.get(x);
+          temp = room.displayRoom();
+          str = str + "\n\n";
+          str = str + temp;
+        }
+        return str;
     }
 
     public void printAllRoomInfo(){

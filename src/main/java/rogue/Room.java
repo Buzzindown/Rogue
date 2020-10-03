@@ -15,6 +15,7 @@ public class Room  {
   private int width;
   private int height;
   private int id;
+  private boolean start;
   private ArrayList<Item> RoomItems;
   private ArrayList<String> DoorDir;
   private ArrayList<Integer> DoorPos;
@@ -49,6 +50,7 @@ public class Room  {
 
    setId(Integer.decode(jsonRooms.get("id").toString()));
    setHeight(Integer.decode(jsonRooms.get("height").toString()));
+   setStart(jsonRooms.get("start").toString());
    setWidth(Integer.decode(jsonRooms.get("width").toString()));
    for(Object doors : (JSONArray) jsonRooms.get("doors")){
      JSONObject jsonDoors = (JSONObject)doors;
@@ -93,7 +95,21 @@ public class Room  {
 */
  }
 
+public void setStart(String bool){
+  if(bool.equals("true")){
+    start = true;
+  }else{
+    start = false;
+  }
+}
 
+public String getStart(){
+  if(start == true){
+    return "true";
+  }else{
+    return "false";
+  }
+}
 
 
    // Required getter and setters below
@@ -161,6 +177,7 @@ width = newWidth;
    System.out.println("Room id: " + id);
    System.out.println("height: " + height);
    System.out.println("width: " + width);
+   System.out.println("start: " + getStart());
    System.out.println("Doors ... ");
    if(DN > 0){
      System.out.println("North door @ pos : " + DN);
@@ -177,6 +194,7 @@ width = newWidth;
 
    int sizeB = RoomItems.size();
    if(sizeB > 0){
+     System.out.println("Loot ...");
      for(i=0; i < sizeB; i++){
        Item temp = RoomItems.get(i);
        Point p = temp.getXyLocation();
@@ -222,8 +240,62 @@ return true;
     * @return (String) String representation of how the room looks
     */
    public String displayRoom() {
-    return null;
+    String head = "<---- [Room " + id + "] ---->\n";
+    if(start == true){
+      String head2 = "- Starting Room\n";
+      head = head + head2;
+    }
+    char[] output = new char[(width+1)*height];
+    int x = 0;
+    int z = 0;
+    int p = 0;
+    for(z = 0; z < width; z++){
+        output[x] = '-';
+        x++;
+    }
+      output[x] = 10;
+      x++;
+    for(z = 0; z < height-2;z++){
+      output[x] = '|';
+      x++;
+      for(p =0; p <width-2;p++){
+        output[x] = '.';
+        x++;
+      }
+      output[x] = '|';
+      x++;
+      output[x] = 10;
+      x++;
+    }
+    for(z = 0; z < width; z++){
+        output[x] = '-';
+        x++;
+    }
+      output[x] = 10;
+      x++;
 
+    for(p =0; p< RoomItems.size();p++){
+      Item item = RoomItems.get(p);
+      Point point = item.getXyLocation();
+      int h = (int)point.getX();
+      int j = (int)point.getY();
+      int location = ((width+1) * j) + h;
+      output[location] = '*';
+    }
+    boolean playerNSet = true;
+    x = 0;
+    if(start == true){
+    while(playerNSet){
+      if(output[x] == '.'){
+        output[x] = '@';
+        playerNSet = false;
+      }
+      x++;
+    }
+}
 
+  String str = String.valueOf(output);
+  str = head + str;
+  return str;
    }
 }

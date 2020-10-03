@@ -24,8 +24,6 @@ public class A1Solution{
         // Hardcoded configuration file location/name
         String configurationFileLocation = "fileLocations.json";  //please don't change this for this version of the assignment
 
-      //  ArrayList<Room> roomsList = new ArrayList<>();
- // reading the input file locations using the configuration file
         JSONParser parser = new JSONParser();
         try {
 
@@ -34,6 +32,11 @@ public class A1Solution{
             Rogue rogue = new Rogue();
             rogue.createRooms(configurationFileLocation);
             rogue.printAllRoomInfo();
+            System.out.println(rogue.displayAll());
+    //        ArrayList<Room> rooz = new ArrayList<>();
+    //        rooz = rogue.getRooms();
+    //        Room room = rooz.get(0);
+    //        System.out.println(room.displayRoom());
 
 
 
@@ -45,11 +48,6 @@ public class A1Solution{
             e.printStackTrace();
         }
 
-
-    }
-
-
-    public void printRooms(){
 
     }
 
