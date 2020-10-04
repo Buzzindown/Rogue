@@ -20,16 +20,16 @@ public class Item  {
 
     }
 
-    public Item(int id, String name, String type, Point xyLocation) {
-      setId(id);
-      setName(name);
-      setType(type);
-      setXyLocation(xyLocation);
+    public Item(int id, String namez, String typez, Point xyLocationz) {
+      identif = id;
+      name = namez;
+      type = typez;
+      xyLocation = xyLocationz;
     }
 
     // Getters and setters
 
-
+    // get our id num
     public int getId() {
         return identif;
     }
@@ -39,7 +39,7 @@ public class Item  {
         identif = id;
     }
 
-
+    // get our name
     public String getName() {
         return name;
     }
@@ -49,7 +49,7 @@ public class Item  {
       name = name;
     }
 
-
+    // get our type
     public String getType() {
         return type;
 
@@ -60,7 +60,7 @@ public class Item  {
       type = type;
     }
 
-
+    // get display charcter
     public Character getDisplayCharacter() {
         return displayCharacter;
 
@@ -72,6 +72,7 @@ public class Item  {
     }
 
 
+    // get our description
     public String getDescription() {
         return description;
 
@@ -82,7 +83,7 @@ public class Item  {
       description = newDescription;
     }
 
-
+    // get our point
     public Point getXyLocation() {
         return xyLocation;
 
@@ -93,7 +94,7 @@ public class Item  {
       xyLocation = newXyLocation;
     }
 
-
+    // get current roo
     public Room getCurrentRoom() {
         return curRoom;
 

@@ -29,14 +29,23 @@ public class A1Solution{
 
             Object obj = parser.parse(new FileReader(configurationFileLocation));
             JSONObject configurationJSON = (JSONObject) obj;
+
+            // getting our room filename and making it a jsonobject
+            String roomLocs = (configurationJSON.get("Rooms").toString());
+
+            String symbolsLoc = (configurationJSON.get("Symbols").toString());
+
+
             Rogue rogue = new Rogue();
-            rogue.createRooms(configurationFileLocation);
-            rogue.printAllRoomInfo();
+            Player thePlayer = new Player();
+            thePlayer.setName("thePlayer");
+            rogue.setPlayer(thePlayer);
+
+            rogue.setSymbols(symbolsLoc);
+            rogue.createRooms(roomLocs);
+            rogue.giveRoomSymbol();
             System.out.println(rogue.displayAll());
-    //        ArrayList<Room> rooz = new ArrayList<>();
-    //        rooz = rogue.getRooms();
-    //        Room room = rooz.get(0);
-    //        System.out.println(room.displayRoom());
+            rogue.printAllRoomInfo();
 
 
 
