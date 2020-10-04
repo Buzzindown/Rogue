@@ -45,7 +45,7 @@ public class A1Solution{
             rogue.createRooms(roomLocs);
             rogue.giveRoomSymbol();
             System.out.println(rogue.displayAll());
-            rogue.printAllRoomInfo();
+
 
 
 

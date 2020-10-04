@@ -102,15 +102,14 @@ public class Rogue{
             JSONObject rooms = (JSONObject) obj2;
             //making an array of these jsonobjects
             JSONArray roomsArr = (JSONArray) rooms.get("room");
-            JSONArray itemsArr = (JSONArray) rooms.get("items");
+
             int x = 0;
             // parsing all of the room data and storing in array
             for(Object o : roomsArr){
-              JSONObject b = (JSONObject)itemsArr.get(x);
               JSONObject oneRoom = (JSONObject)o;
               Room newRoom = new Room();
               newRoom.setPlayer(player);
-              parseRoom(oneRoom,b, newRoom);
+              parseRoom(oneRoom,rooms, newRoom);
               tempor.add(x,newRoom);
               x++;
             }
@@ -187,18 +186,20 @@ public class Rogue{
       ArrayList<String> itemsName = new ArrayList<>();
       ArrayList<String> itemsType = new ArrayList<>();
 
-
-       Integer temp1 = Integer.decode(jsonItems.get("id").toString());
-       String temp2 = jsonItems.get("name").toString();
-       String temp3 = jsonItems.get("type").toString();
+      for(Object itemz : (JSONArray) jsonItems.get("items")){
+        JSONObject jsonIt = (JSONObject) itemz;
+       Integer temp1 = Integer.decode(jsonIt.get("id").toString());
+       String temp2 = jsonIt.get("name").toString();
+       String temp3 = jsonIt.get("type").toString();
        itemsID.add(temp1);
        itemsName.add(temp2);
        itemsType.add(temp3);
-
+}
 
      for(c = 0;c < identifs.size();c++ ){
        Integer j = identifs.get(c);
-       Item item = new Item(j, itemsName.get(j-1),itemsType.get(j-1),points.get(c));
+       Integer v = j-1;
+       Item item = new Item(j, itemsName.get(v),itemsType.get(v),points.get(c));
        tempItems.add(item);
      }
 

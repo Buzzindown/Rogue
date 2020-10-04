@@ -18,8 +18,8 @@ public class Player {
     }
 
 
-    public Player(String name) {
-      setName(name);
+    public Player(String namez) {
+      name = namez;
       Point p = new Point(-1,-1);
       xyLocation = p;
     }

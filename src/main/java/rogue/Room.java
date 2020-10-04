@@ -220,7 +220,7 @@ public void setPlayerinRoom(){
     int x = 0;
     int z = 0;
     int p = 0;
-    // top wall
+    // getting all of our symbols for printing
     char tb = getSymbolbyName("NS_WALL");
     char lr = getSymbolbyName("EW_WALL");
     char itemZ = getSymbolbyName("ITEM");
@@ -291,13 +291,12 @@ public void setPlayerinRoom(){
     }
 }
 // printing our door locations
-// door char is '+' rn
       int k = 0;
       if(DN > 0){
         output[DN] = dr;
       }
       if(DE > 0){
-        k = (width+1)*(DE+1);
+        k = (width+1)*(DE+1)-2;
         output[k] = dr;
       }
       if(DS > 0){
@@ -306,7 +305,7 @@ public void setPlayerinRoom(){
 
       }
       if(DW > 0){
-        k = ((width+1)*(DW-1))+1;
+        k = ((width+1)*(DW));
         output[k] = dr;
       }
 // putting our head and string together

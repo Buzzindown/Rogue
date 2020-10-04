@@ -45,8 +45,8 @@ public class Item  {
     }
 
 
-    public void setName(String name) {
-      name = name;
+    public void setName(String namez) {
+      name = namez;
     }
 
     // get our type
@@ -56,8 +56,8 @@ public class Item  {
     }
 
 
-    public void setType(String type) {
-      type = type;
+    public void setType(String typez) {
+      type = typez;
     }
 
     // get display charcter
