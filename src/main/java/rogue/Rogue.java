@@ -351,57 +351,62 @@ public void addItem(Map<String, String> toAdd) {
       }catch(NotEnoughDoorsException b){
         Boolean foundSpace = false;
         for(Room z : roomZ){
-          if(z.getId() != r.getId()){
-                ArrayList<Door> doorH = z.retDoor();
+          if(foundSpace == false){
+            if(z.getId() != r.getId()){
+                  ArrayList<Door> doorH = z.retDoor();
+                  // z is finding a room with less than 4 doors
+                  if(doorH.size() < 4){
+                    Boolean N = false;
+                    Boolean E = false;
+                    Boolean S = false;
+                    Boolean W = false;
+                    for(Door d : doorH){
+                      String wall = d.getWall();
+                      if(wall.equals("N")){
+                        N = true;
+                      }
+                      if(wall.equals("E")){
+                        E = true;
+                      }
+                      if(wall.equals("S")){
+                        S = true;
+                      }
+                      if(wall.equals("W")){
+                        W = true;
+                      }
+                    }
+                    Door d = new Door();
+                    Door j = new Door();
+                    j.setCRN(z.getId());
+                    d.setCRN(r.getId());
+                    d.connectRoom(r);
+                    j.connectRoom(z);
+                    if(N == false){
+                      d.setWall("N");
+                      j.setWall("S");
+                      d.setLocation(z.getWidth()/2);
+                      j.setLocation(r.getWidth()/2);
 
-                if(doorH.size() < 4){
-                  Boolean N = false;
-                  Boolean E = false;
-                  Boolean S = false;
-                  Boolean W = false;
-                  for(Door d : doorH){
-                    String wall = d.getWall();
-                    if(wall.equals("N")){
-                      N = true;
+                    }else if(E == false){
+                      d.setWall("E");
+                      j.setWall("W");
+                      d.setLocation(z.getHeight()/2);
+                      j.setLocation(r.getHeight()/2);
+                    }else if(S == false){
+                      d.setWall("S");
+                      j.setWall("N");
+                      d.setLocation(z.getWidth()/2);
+                      j.setLocation(r.getWidth()/2);
+                    }else if(W == false){
+                      d.setWall("W");
+                      j.setWall("E");
+                      d.setLocation(z.getHeight()/2);
+                      j.setLocation(r.getHeight()/2);
                     }
-                    if(wall.equals("E")){
-                      E = true;
-                    }
-                    if(wall.equals("S")){
-                      S = true;
-                    }
-                    if(wall.equals("W")){
-                      W = true;
-                    }
+                    foundSpace = true;
+                    z.addDoor(d);
+                    r.addDoor(j);
                   }
-                  Door d = new Door();
-                  Door j = new Door();
-                  j.setCRN(z.getId());
-                  d.setCRN(r.getId());
-                  if(N == false){
-                    d.setWall("N");
-                    j.setWall("S");
-                    d.setLocation(z.getWidth()/2);
-                    j.setLocation(r.getWidth()/2);
-                  }else if(E == false){
-                    d.setWall("E");
-                    j.setWall("W");
-                    d.setLocation(z.getHeight()/2);
-                    j.setLocation(r.getHeight()/2);
-                  }else if(S == false){
-                    d.setWall("S");
-                    j.setWall("N");
-                    d.setLocation(z.getWidth()/2);
-                    j.setLocation(r.getWidth()/2);
-                  }else if(W == false){
-                    d.setWall("W");
-                    j.setWall("E");
-                    d.setLocation(z.getHeight()/2);
-                    j.setLocation(r.getHeight()/2);
-                  }
-                  foundSpace = true;
-                  z.addDoor(d);
-                  r.addDoor(j);
                 }
               }
             }
