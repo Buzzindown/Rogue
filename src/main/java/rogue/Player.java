@@ -1,57 +1,79 @@
 package rogue;
-import java.util.ArrayList;
 import java.awt.Point;
 /**
- * The player character
+ * The player character class.
  */
 public class Player {
-  // player needs a name, location and room
-    String name;
-    Point xyLocation;
-    Room currentRoom;
+    private String name;
+    private Point xyLocation;
+    private Room currentRoom;
 
-    // Default constructor
-    // our default location is -1,-1 for the char
+/**
+*default constructor.
+*/
     public Player() {
-      Point p = new Point(-1,-1);
+      Point p = new Point(1, 1);
       xyLocation = p;
     }
 
-
+/**
+*overloaded constructor.
+*@param namez players new name.
+*/
     public Player(String namez) {
       name = namez;
-      Point p = new Point(-1,-1);
+      Point p = new Point(1, 1);
       xyLocation = p;
     }
 
-    // get player name
+/**
+*Name getter.
+* @return name
+*/
     public String getName() {
 
         return name;
     }
 
 
+/**
+*Name setter.
+* @param newName new name
+*/
     public void setName(String newName) {
       name = newName;
     }
-    // get our players location as a point
+
+/**
+*Location getter.
+*@return a point object.
+*/
     public Point getXyLocation() {
         return xyLocation;
 
     }
 
-
+/**
+*Location setter.
+* @param newXyLocation new player location
+*/
     public void setXyLocation(Point newXyLocation) {
       xyLocation = newXyLocation;
     }
 
-    // get the players current room
+/**
+*Room getter.
+* @return current room.
+*/
     public Room getCurrentRoom() {
         return currentRoom;
 
     }
 
-
+/**
+*Room setter.
+* @param newRoom new room./
+*/
     public void setCurrentRoom(Room newRoom) {
       currentRoom = newRoom;
     }

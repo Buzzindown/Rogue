@@ -1,12 +1,8 @@
 package rogue;
 import java.util.ArrayList;
-import java.util.Map;
 import java.awt.Point;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
-
+import java.util.HashMap;
+import java.io.*;
 /**
  * A room within the dungeon - contains monsters, treasure,
  * doors out, etc.
@@ -16,254 +12,314 @@ public class Room  {
   private int height;
   private int id;
   private boolean start;
-  private boolean isPinR;
-  private ArrayList<Item> RoomItems;
-  private ArrayList<String> DoorDir;
-  private ArrayList<Integer> DoorPos;
-  private ArrayList<Symbol> symbols;
+  private ArrayList<Item> roomItems;
+  private ArrayList<Door> door;
+  private HashMap<String, Character> symbols;
   private Player player;
-  private int DN;
-  private int DE;
-  private int DS;
-  private int DW;
 
 
+/**
+*find a empty tile
+*@return a point to move our item to
+*/
+public Point findEmptyTile() {
+  int x,y = 0;
+  Point ret = new Point(1,1);
+  Point play = player.getXyLocation();
+  int blank = 0;
+  for(y = 1; y < height - 1; y++){
+    for(x = 1; x < width - 1; x++){
+      Point temp = new Point(x,y);
+      if(!roomItems.isEmpty()) {
+          for(Item e : roomItems) {
+            if((temp.equals(e.getXyLocation())) != true) {
+              if((temp.equals(play)) != true){
 
-    // Default constructor
+              ret = temp;
+              }
+            }
+          }
+        }else{
+                ret = temp;
+        }
+
+    }
+  }
+  return ret;
+}
+
+/**
+* Default room constructor.
+*/
  public Room() {
-
+  roomItems = new ArrayList<Item>();
+  door = new ArrayList<Door>();
  }
 
+ /**
+ * add door to arraylist
+ *@param toAdd new door
+ */
+ public void addDoor(Door toAdd){
+   door.add(toAdd);
+ }
 
- public void setSymbols(ArrayList<Symbol> symbs){
+ /**
+ *check if rooms r good
+ *@return if the room is good
+ */
+ public Boolean verifyRoom() throws NotEnoughDoorsException{
+   if(door.isEmpty()){
+     throw new NotEnoughDoorsException();
+   }else{
+     return true;
+   }
+ };
+
+ /**
+ *get door arraylist
+ *@return door arraylist
+ */
+ public ArrayList<Door> retDoor(){
+   return door;
+ }
+
+ /**
+ *get door arraylist
+ *@return door arraylist
+ */
+ public ArrayList<Door> retDoorNE(){
+   return door;
+ }
+
+ /**
+ * Symbol ArrayList setter.
+ *@param symbs arraylist of symbols
+ */
+ public void setSymbols(HashMap<String, Character> symbs) {
    symbols = symbs;
  }
 
+ /**
+ *add items
+ *@param toAdd
+ */
+ public void addItem(Item toAdd) throws ImpossiblePositionException, NoSuchItemException{
+   Point p = toAdd.getXyLocation();
 
- public char getSymbolbyName(String name){
-   int x = 0;
-   for(x = 0; x < symbols.size();x++){
-     Symbol symb = symbols.get(x);
-     if(symb.getSymbolName().equals(name)){
-       return symb.getSymbol();
+   if(p == null){
+     throw new NoSuchItemException();
+   }
+   if(toAdd.getCurrentRoom() == null){
+     throw new NoSuchItemException();
+   }
+   if(p.getX() > width - 2 || p.getX() < 1){
+     throw new ImpossiblePositionException();
+   }
+   if(p.getY() > height -2 || p.getY() < 1){
+     throw new ImpossiblePositionException();
+   }
+   for(Item e : roomItems){
+     Point p2 = e.getXyLocation();
+     Point p3 = toAdd.getXyLocation();
+     if(p2.equals(p3)){
+       throw new ImpossiblePositionException();
      }
    }
-   return '!';
+   p = player.getXyLocation();
+   if(p.equals(toAdd.getXyLocation())){
+     throw new ImpossiblePositionException();
+   }
+
+   roomItems.add(toAdd);
  }
 
-  // Setting whether this is our start room
-public void setStart(String bool){
-  if(bool.equals("true")){
+ /**
+ *add item no excep
+ *@param toAdd item
+ */
+
+ public void addItemNE(Item toAdd) {
+   roomItems.add(toAdd);
+ }
+
+ /**
+ * Set whether the player starts in this room or not.
+ *@param bool start boolean
+ */
+public void setStart(String bool) {
+  if (bool.equals("true")) {
     start = true;
-  }else{
+  } else {
     start = false;
   }
 }
-  //gets start bool as string
-public String getStart(){
-  if(start == true){
-    return "true";
-  }else{
-    return "false";
-  }
-}
-  // gets start bool
-public boolean getStartBool(){
+
+/**
+* Player start boolean getter.
+*@return start
+*/
+public boolean getStartBool() {
   return start;
 }
 
-
-   // Required getter and setters below
+/**
+* Width getter.
+*@return width
+*/
  public int getWidth() {
   return width;
 }
 
-// set width of room
+/**
+* Width setter.
+*@param newWidth new width
+*/
  public void setWidth(int newWidth) {
   width = newWidth;
  }
 
-
+ /**
+ * height getter.
+ * @return height
+ */
  public int getHeight() {
   return height;
  }
 
-//set height of room
+ /**
+ * Height setter.
+ * @param newHeight new height
+ */
  public void setHeight(int newHeight) {
    height = newHeight;
  }
 
-//get room id
+ /**
+ * Room number getter.
+ * @return id
+ */
  public int getId() {
     return id;
  }
 
-
+ /**
+ * Room number setter.
+ * @param newId
+ */
  public void setId(int newId) {
    id = newId;
  }
 
-// Arraylist of our room items
+ /**
+ * Arraylist of items getter.
+ * @return roomItems
+ */
  public ArrayList<Item> getRoomItems() {
-    return RoomItems;
-
+    return roomItems;
  }
 
+ /**
+ * Arraylist of items setter.
+ * @param newRoomItems arraylist of room items
+ */
  public void setRoomItems(ArrayList<Item> newRoomItems) {
-   RoomItems = newRoomItems;
+   roomItems = newRoomItems;
  }
 
-
+ /**
+ * Room's player getter.
+ * @return the player
+ */
  public Player getPlayer() {
     return player;
  }
 
-// set our rooms player
+ /**
+ * Room player setter.
+ * @param newPlayer
+ */
  public void setPlayer(Player newPlayer) {
    player = newPlayer;
  }
 
-// return door position by direction
- public int getDoor(String direction){
-
-  if(direction.equals("N")){
-    return DN;
-  }else if(direction.equals("E")){
-    return DE;
-  }else if(direction.equals("S")){
-    return DS;
-  }else if(direction.equals("W")){
-    return DW;
-  }else{
-    return 0;
-  }
-
-}
-// helpful for debugging, essentially spits out all the objects to sysout
- public void printInfo(){
+/**
+* Debug method that prints json parsed info about a room.
+*/
+ public void printInfo() {
    int i = 0;
    System.out.println("Room id: " + id);
    System.out.println("height: " + height);
    System.out.println("width: " + width);
-   System.out.println("start: " + getStart());
+   System.out.println("start: " + getStartBool());
    System.out.println("Doors ... ");
-   if(DN > 0){
-     System.out.println("North door @ pos : " + DN);
+   for(Door d : door){
+     System.out.println("Wall: " + d.getWall());
+     ArrayList<Integer> tempRN = d.getRoomNums();
+     for(Integer r : tempRN){
+     System.out.println("Connected room: " + r);
+    }
+    System.out.println("Location: " + d.getLocation());
    }
-   if(DE > 0){
-     System.out.println("East door @ pos : " + DE);
-   }
-   if(DS > 0){
-     System.out.println("South door @ pos : " + DS);
-   }
-   if(DW > 0){
-     System.out.println("West door @ pos : " + DW);
-   }
-
-   int sizeB = RoomItems.size();
-   if(sizeB > 0){
+   int sizeB = roomItems.size();
+   if (sizeB > 0) {
      System.out.println("Loot ...");
-     for(i=0; i < sizeB; i++){
-       Item temp = RoomItems.get(i);
+     for (i = 0; i < sizeB; i++) {
+       Item temp = roomItems.get(i);
        Point p = temp.getXyLocation();
-       System.out.println("Item id: " + temp.getId() + " name: " + temp.getName() + " type: " + temp.getType() + " at position " + p.getX() + "," + p.getY());
+       System.out.println("Item id: " + temp.getId() + " name: " + temp.getName()
+       + " type: " + temp.getType() + " at position " + p.getX() + "," + p.getY());
+       System.out.println("Item description: " + temp.getDescription());
      }
-   }else{
+   } else {
      System.out.println("No loot in this room");
    }
-
    System.out.println();
  }
 
 
-// setting our doors and their locations
-public void setDoor(String direction, int location){
-  if(direction.equals("N")){
-    DN = location;
-  }else if(direction.equals("E")){
-    DE = location;
-  }else if(direction.equals("S")){
-    DS = location;
-  }else if(direction.equals("W")){
-    DW = location;
-  }
-}
 
-// check if the player is actually in the room
-public boolean isPlayerInRoom() {
-  return isPinR;
-}
-
-// lets us know the player is in the room
-public void setPlayerinRoom(){
-  isPinR = true;
-}
-
-
-
-
-
-   /**
-    * Produces a string that can be printed to produce an ascii rendering of the room and all of its contents
-    * @return (String) String representation of how the room looks
-    */
+/**
+* Produces a string that can be printed to produce an ascii rendering of the room and all of its contents.
+* @return (String) String representation of how the room looks.
+*/
    public String displayRoom() {
 // printing header
     String head = "<---- [Room " + id + "] ---->\n";
-    if(start == true){
+    if (start) {
       String head2 = "- Starting Room\n";
       head = head + head2;
     }
     // this is our output string its + 1 width to fit a newline char
-    char[] output = new char[(width+1)*height];
-    // just counter vars
-    int x = 0;
-    int z = 0;
-    int p = 0;
+    char[] output = new char[(width + 1) * height];
     // getting all of our symbols for printing
-    char tb = getSymbolbyName("NS_WALL");
-    char lr = getSymbolbyName("EW_WALL");
-    char itemZ = getSymbolbyName("ITEM");
-    char plyr = getSymbolbyName("PLAYER");
-    char flr = getSymbolbyName("FLOOR");
-    char dr = getSymbolbyName("DOOR");
-    for(z = 0; z < width; z++){
-      // top wall character
-        output[x] = tb ;
-        x++;
-    }
-    // newline
-      output[x] = 10;
-      x++;
-    for(z = 0; z < height-2;z++){
-      // left wall character
-      output[x] = lr;
-      x++;
-      for(p =0; p <width-2;p++){
-        // floor character
-        output[x] = flr;
-        x++;
-      }
-      // right wall character
-      output[x] = lr;
-      x++;
-      output[x] = 10;
-      x++;
-    }
-    for(z = 0; z < width; z++){
-      // bottom wall character
-        output[x] = tb;
-        x++;
-    }
-      output[x] = 10;
-      x++;
+    char tb = symbols.get("NS_WALL");
+    char lr = symbols.get("EW_WALL");
+    char itemZ = symbols.get("ITEM");
+    char plyr = symbols.get("PLAYER");
+    char flr = symbols.get("FLOOR");
+    char dr = symbols.get("DOOR");
+
+    output = printBaseRoom(output, tb, lr, flr);
     // setting our item locations
-    for(p =0; p< RoomItems.size();p++){
-      Item item = RoomItems.get(p);
+   output = printItemsPlayer(output, itemZ, flr, plyr);
+// printing our door locations
+   output = printDoors(output, dr);
+// putting our head and string together
+  String str = String.valueOf(output);
+  str = head + str;
+  return str;
+   }
+
+  private char[] printItemsPlayer(char[] output, char itemZ, char flr, char plyr) {
+    int x = 0;
+    int p = 0;
+    for (p = 0; p < roomItems.size(); p++) {
+      Item item = roomItems.get(p);
       Point point = item.getXyLocation();
-      int h = (int)point.getX();
-      int j = (int)point.getY();
-      int location = ((width+1) * j) + h;
+      int h = (int) point.getX();
+      int j = (int) point.getY();
+      int location = ((width + 1) * j) + h;
       // item character
       output[location] = itemZ;
     }
@@ -272,45 +328,94 @@ public void setPlayerinRoom(){
     x = 0;
     int hightMod = 0;
     int widMod = 0;
-    // finding a spot for our character where there is floor
-    if(start == true){
-    while(playerNSet){
-      if(output[x] == flr){
-        output[x] = plyr;
-        // setting our players location
-        Point playLoc = new Point(hightMod, widMod);
-        player.setXyLocation(playLoc);
-        playerNSet = false;
-      }
+
+    Room r = player.getCurrentRoom();
+    if(r.getId() == id){
+      int h = width+1;
+      Point temP = player.getXyLocation();
+      h += (int)temP.getY()*(width+1);
+      h = h - (width+1- (int)temP.getX());
+      output[h] = plyr;
+
+    }
+    return output;
+  }
+
+  private char[] printBaseRoom(char[] output, char tb, char lr, char flr) {
+    int x = 0;
+    int z = 0;
+    int p = 0;
+
+    for (z = 0; z < width; z++) {
+        output[x] = tb;
+        x++;
+    }
+    // newline
+      output[x] = '\n';
       x++;
-      widMod++;
-      if(x%(width+1) == 0){
-        hightMod++;
-        widMod = 0;
+    for (z = 0; z < height - 2; z++) {
+      // left wall character
+      output[x] = lr;
+      x++;
+      for (p = 0; p < width - 2; p++) {
+        // floor character
+        output[x] = flr;
+        x++;
+      }
+      // right wall character
+      output[x] = lr;
+      x++;
+      output[x] = '\n';
+      x++;
+    }
+    for (z = 0; z < width; z++) {
+      // bottom wall character
+        output[x] = tb;
+        x++;
+    }
+      output[x] = '\n';
+      x++;
+
+    return output;
+  }
+
+
+  private char[] printDoors(char[] output, char dr) {
+  int k = 0;
+  for(Door d : door) {
+    int val = d.getLocation();
+    if(d.getWall().equals("N")) {
+      if (val > 0) {
+        output[val] = dr;
+      }
+    }
+    if(d.getWall().equals("E")) {
+      if (val > 0) {
+        if (val > 0) {
+          k = (width + 1) * (val + 1) - 2;
+          output[k] = dr;
+        }
+      }
+    }
+    if(d.getWall().equals("S")) {
+      if (val > 0) {
+        if (val > 0) {
+          k = (width + 1) * (height - 1) + val;
+          output[k] = dr;
+        }
+      }
+    }
+    if(d.getWall().equals("W")) {
+      if (val > 0) {
+        if (val > 0) {
+          k = ((width + 1) * (val));
+          output[k] = dr;
+        }
       }
     }
 }
-// printing our door locations
-      int k = 0;
-      if(DN > 0){
-        output[DN] = dr;
-      }
-      if(DE > 0){
-        k = (width+1)*(DE+1)-2;
-        output[k] = dr;
-      }
-      if(DS > 0){
-        k = (width+1)*(height-1) + DS;
-        output[k] = dr;
 
-      }
-      if(DW > 0){
-        k = ((width+1)*(DW));
-        output[k] = dr;
-      }
-// putting our head and string together
-  String str = String.valueOf(output);
-  str = head + str;
-  return str;
-   }
+    return output;
+  }
+
 }

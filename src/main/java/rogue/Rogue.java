@@ -1,225 +1,476 @@
 package rogue;
-
 import java.util.ArrayList;
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
 import java.awt.Point;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import java.util.Map;
+import java.util.HashMap;
+/**
+ * The rogue game class.
+ */
+public class Rogue {
+    private RogueParser parser;
+    private ArrayList<Room> roomZ = new ArrayList<Room>();
+    private ArrayList<Map<String,String>> items;
+    private ArrayList<Map<String,String>> itemLocs;
+    private ArrayList<Door> doors = new ArrayList<Door>();
+    private Player player = new Player();
+    private String msg;
+    private int x;
+    private int y;
+    private ArrayList<Door> doorss;
+    private Boolean goodMove;
+    private Boolean thruDoor;
+    private Boolean validDoor;
+    private Boolean pickedItem;
+    private Point p;
+    private Door nextDoor;
+    public static final char UP = 'w';
+    public static final char DOWN = 's';
+    public static final char LEFT = 'a';
+    public static final char RIGHT = 'd';
 
+/**
+*adds a room to roomZ arraylist
+*@param toAdd the map of stuff
+*/
 
-public class Rogue{
-  // our game of rogue needs a player, symbol map, arry of rooms and array of items
-    Player player;
-    String SymbolsFilename;
-    ArrayList<Room> roomZ;
-    ArrayList<Item> items;
-    // not added yet but this is where we'll store our symbols
-    ArrayList<Symbol> symbols;
-// setting our player
-    public void setPlayer(Player thePlayer){
-      player = thePlayer;
-    }
-
-// setting symbols (need to work on) this will be a parsing function
-    public void setSymbols(String filename){
-      JSONParser parser = new JSONParser();
-      try {
-        ArrayList<Symbol> symb = new ArrayList<>();
-
-        Object obj2 = parser.parse(new FileReader(filename));
-        JSONObject symbolZ = (JSONObject) obj2;
-
-        JSONArray symbolZArr = (JSONArray) symbolZ.get("symbols");
-        int x = 0;
-        for(Object z : symbolZArr){
-          JSONObject oneSymbol = (JSONObject)z;
-          String name = oneSymbol.get("name").toString();
-          String chara = oneSymbol.get("symbol").toString();
-
-          Symbol syma = new Symbol(name, chara.charAt(0));
-          symb.add(syma);
-          x++;
-        }
-        symbols = symb;
-
-
-      } catch(FileNotFoundException e) {
-          e.printStackTrace();
-      } catch (IOException e) {
-          e.printStackTrace();
-      } catch (ParseException e) {
-          e.printStackTrace();
-      }
-    }
-
-    public char getSymbolbyName(String name){
-      int x = 0;
-      for(x = 0; x < symbols.size();x++){
-        Symbol symb = symbols.get(x);
-        if(symb.getSymbolName().equals(name)){
-          return symb.getSymbol();
-        }
-      }
-      return '!';
-    }
-
-    public void giveRoomSymbol(){
-      int x = 0;
-      for(x = 0; x<roomZ.size();x++){
-        Room r = roomZ.get(x);
-        r.setSymbols(symbols);
+public void addRoom(Map<String, String> toAdd) {
+  Room room = new Room();
+  room.setPlayer(player);
+  room.setId(Integer.parseInt(toAdd.get("id")));
+  room.setStart(toAdd.get("start"));
+  room.setHeight(Integer.parseInt(toAdd.get("height")));
+  room.setWidth(Integer.parseInt(toAdd.get("width")));
+  room.setSymbols(parser.retSymbols());
+  for(Door d : doors){
+    if(d.getRoomID() == room.getId()){
+      room.addDoor(d);
     }
   }
-// getting our rooms
-    public ArrayList<Room> getRooms(){
+  roomZ.add(room);
+}
+
+/**
+*returns the new display of the room
+*@return string of the new room
+*/
+public String getNextDisplay(){
+  Room r = player.getCurrentRoom();
+  return r.displayRoom();
+}
+
+/**
+*returns the new display of the room
+*@return string of the new room
+*/
+public String getBlankDisplay(){
+  int x =0;
+  char[] temp = new char[1920];
+  for(x = 0; x < 1920; x++) {
+    temp[x] = ' ';
+  }
+  String str = new String(temp);
+  return str;
+}
+
+private void moveDir(char input){
+  if(input == UP){
+    y--;
+    msg = "moved N";
+  }else if(input == DOWN){
+    y++;
+    msg = "moved E";
+  }
+  else if(input == LEFT){
+    x--;
+    msg = "moved W";
+  }else if(input == RIGHT){
+    x++;
+    msg = "moved S";
+  }
+}
+
+private void moveDoorWest(){
+  for(Door h : doorss){
+    if((h.getWall()).equals("W")){
+      nextDoor = h;
+      validDoor = true;
+    }
+  }
+  if(validDoor == true){
+    if(p.getY() == nextDoor.getLocation()){
+      Room newRoom = nextDoor.getConRoom();
+      ArrayList<Door> m = newRoom.retDoor();
+      for(Door f : m){
+        if((f.getWall()).equals("E")){
+          player.setCurrentRoom(newRoom);
+          p.setLocation(newRoom.getWidth()-2,f.getLocation());
+          player.setXyLocation(p);
+          thruDoor = true;
+          msg = msg + "...entered room: " + newRoom.getId();
+
+        }
+      }
+    }
+  }
+  goodMove = false;
+}
+
+private void moveDoorEast(){
+  //if we go into east wall
+  for(Door h : doorss){
+    if((h.getWall()).equals("E")){
+      nextDoor = h;
+      validDoor = true;
+    }
+  }
+  if(validDoor == true){
+      if(p.getY() == nextDoor.getLocation()){
+        Room newRoom = nextDoor.getConRoom();
+        ArrayList<Door> m = newRoom.retDoor();
+        for(Door f : m){
+          if((f.getWall()).equals("W")){
+            player.setCurrentRoom(newRoom);
+            p.setLocation(1,f.getLocation());
+            player.setXyLocation(p);
+            thruDoor = true;
+            msg = msg + "...entered room: " + newRoom.getId();
+          }
+        }
+      }
+    }
+  goodMove = false;
+}
+
+private void moveDoorNorth(){
+  for(Door h : doorss){
+    if((h.getWall()).equals("N")){
+      nextDoor = h;
+      validDoor = true;
+    }
+  }
+  if(validDoor == true){
+    if(p.getX() == nextDoor.getLocation()){
+      Room newRoom = nextDoor.getConRoom();
+      ArrayList<Door> m = newRoom.retDoor();
+      for(Door f : m){
+        if((f.getWall()).equals("S")){
+          player.setCurrentRoom(newRoom);
+          p.setLocation(f.getLocation(),newRoom.getHeight()-2);
+          player.setXyLocation(p);
+          thruDoor = true;
+          msg = msg + "...entered room: " + newRoom.getId();
+        }
+      }
+    }
+  }
+  goodMove = false;
+}
+
+private void moveDoorSouth(){
+  for(Door h : doorss){
+    if((h.getWall()).equals("S")){
+      nextDoor = h;
+      validDoor = true;
+    }
+  }
+  if(validDoor == true){
+      if(p.getX() == nextDoor.getLocation()){
+        Room newRoom = nextDoor.getConRoom();
+        ArrayList<Door> m = newRoom.retDoor();
+        for(Door f : m){
+          if((f.getWall()).equals("N")){
+            player.setCurrentRoom(newRoom);
+            p.setLocation(f.getLocation(),1);
+            player.setXyLocation(p);
+            thruDoor = true;
+            msg = msg + "...entered room: " + newRoom.getId();
+          }
+        }
+      }
+    }
+  goodMove = false;
+}
+/**
+* moves the character
+*@param input userinput char
+*@return a string for the player
+*/
+public String makeMove(char input) throws InvalidMoveException{
+  Room r = player.getCurrentRoom();
+  Point oldLoc = player.getXyLocation();
+  nextDoor = null;
+  doorss = r.retDoor();
+   p = new Point();
+   x = (int)oldLoc.getX();
+   y = (int)oldLoc.getY();
+  goodMove = true;
+  thruDoor = false;
+  validDoor = false;
+  pickedItem = false;
+   msg = "";
+  moveDir(input);
+
+  p.setLocation(x,y);
+
+  if(p.getX() <= 0){
+    moveDoorWest();
+  }
+  if(p.getX() > r.getWidth()-2){
+    moveDoorEast();
+  }
+  if(p.getY() <= 0){
+    moveDoorNorth();
+  }
+  // south door
+  if(p.getY() > r.getHeight() - 2){
+    moveDoorSouth();
+  }
+if(thruDoor == false){
+  if(p.getX() > 0 && p.getX() < r.getWidth() - 1){
+    if(p.getY() > 0 && p.getY() < r.getHeight() -1){
+      goodMove = true;
+      ArrayList<Item> roomIts= r.getRoomItems();
+      int itemIndex = -1;
+      for(Item remIt : roomIts){
+        Point itemPoint = remIt.getXyLocation();
+        if(itemPoint.equals(player.getXyLocation())){
+          itemIndex = roomIts.indexOf(remIt);
+          msg = "picked up: " + remIt.getName();
+          pickedItem = true;
+        }
+      }
+      if(itemIndex >= 0){
+        roomIts.remove(itemIndex);
+      }
+    }
+  }
+}
+  if(goodMove == true && thruDoor == false){
+    player.setXyLocation(p);
+    if(pickedItem == false){
+    msg = msg + ".....( " + p.getX() + " , " + p.getY() + " )";
+    }
+  }else if(goodMove == false && thruDoor == false){
+    player.setXyLocation(oldLoc);
+    throw new InvalidMoveException();
+  }
+  return msg;
+}
+
+
+/**
+*adds a item to items arraylist
+*@param toAdd the map of stuff
+*/
+public void addItem(Map<String, String> toAdd) {
+    if(toAdd.containsKey("x") && toAdd.containsKey("y")){
+    Item item = new Item();
+    Room room = roomZ.get(Integer.parseInt(toAdd.get("room"))-1);
+    item.setCurrentRoom(room);
+    item.setId(Integer.parseInt(toAdd.get("id")));
+    int x = Integer.parseInt(toAdd.get("x"));
+    int y = Integer.parseInt(toAdd.get("y"));
+    Point p = new Point(x,y);
+    item.setXyLocation(p);
+
+    item.setDescription(toAdd.get("description"));
+    item.setName(toAdd.get("name"));
+    item.setType(toAdd.get("type"));
+  // try and add item
+  try{
+    room.addItem(item);
+  }catch (NoSuchItemException d){
+    System.out.println("No such item with id: " + item.getId());
+    items.remove(toAdd);
+  }catch (ImpossiblePositionException e) {
+    item.setXyLocation(room.findEmptyTile());
+    room.addItemNE(item);
+  }
+  }
+}
+
+/**
+* parser caller
+*@param theDungeonInfo parser
+*/
+    public Rogue(RogueParser theDungeonInfo) {
+      parser = theDungeonInfo;
+      // getting our arraylist of doors
+      doors = parser.retDoor();
+      items = parser.getItems();
+      itemLocs = parser.getItemLocs();
+      ArrayList<Map<String, String>> temp = parser.retRooms();
+      for(Map<String, String> roomMap : temp){
+        addRoom(roomMap);
+      }
+      for(Room r : roomZ){
+        ArrayList<Door> d = r.retDoor();
+        for(Door door : d){
+          ArrayList<Integer> in = door.getRoomNums();
+          for(Integer x : in){
+            for(Room z : roomZ){
+              if(z.getId() == x){
+                door.connectRoom(z);
+              }
+            }
+          }
+        }
+      }
+
+      for(Room r : roomZ){
+        doTheDoors(r);
+            if(r.getStartBool()){
+              player.setCurrentRoom(r);
+            }
+      }
+      for(Map<String, String> itemsMap : items) {
+        addItem(itemsMap);
+      }
+      Room x = player.getCurrentRoom();
+
+    }
+/**
+ * Sets the games player.
+ * @param thePlayer the player
+ */
+    public void setPlayer(Player thePlayer) {
+      player.setName(thePlayer.getName());
+
+    }
+
+    private void doTheDoors(Room r){
+      try{
+          r.verifyRoom();
+      }catch(NotEnoughDoorsException b){
+        Boolean foundSpace = false;
+        for(Room z : roomZ){
+          if(z.getId() != r.getId()){
+                ArrayList<Door> doorH = z.retDoor();
+
+                if(doorH.size() < 4){
+                  Boolean N = false;
+                  Boolean E = false;
+                  Boolean S = false;
+                  Boolean W = false;
+                  for(Door d : doorH){
+                    String wall = d.getWall();
+                    if(wall.equals("N")){
+                      N = true;
+                    }
+                    if(wall.equals("E")){
+                      E = true;
+                    }
+                    if(wall.equals("S")){
+                      S = true;
+                    }
+                    if(wall.equals("W")){
+                      W = true;
+                    }
+                  }
+                  Door d = new Door();
+                  Door j = new Door();
+                  j.setCRN(z.getId());
+                  d.setCRN(r.getId());
+                  if(N == false){
+                    d.setWall("N");
+                    j.setWall("S");
+                    d.setLocation(z.getWidth()/2);
+                    j.setLocation(r.getWidth()/2);
+                  }else if(E == false){
+                    d.setWall("E");
+                    j.setWall("W");
+                    d.setLocation(z.getHeight()/2);
+                    j.setLocation(r.getHeight()/2);
+                  }else if(S == false){
+                    d.setWall("S");
+                    j.setWall("N");
+                    d.setLocation(z.getWidth()/2);
+                    j.setLocation(r.getWidth()/2);
+                  }else if(W == false){
+                    d.setWall("W");
+                    j.setWall("E");
+                    d.setLocation(z.getHeight()/2);
+                    j.setLocation(r.getHeight()/2);
+                  }
+                  foundSpace = true;
+                  z.addDoor(d);
+                  r.addDoor(j);
+                }
+              }
+            }
+            if(foundSpace == false) {
+              System.out.println("This dungeon file cannot be used");
+              System.exit(1);
+            }
+          }
+    }
+/**
+ * Rooms ArrayList getter.
+ * @return ararylist of rooms
+ */
+    public ArrayList<Room> getRooms() {
         return roomZ;
 
     }
-// getting our items
-    public ArrayList<Item> getItems(){
+
+/**
+ * Items ArrayList getter.
+ * @return arraylist of items
+ */
+    public ArrayList<Map<String,String>> getItems() {
         return items;
 
     }
-    public Player getPlayer(){
+
+/**
+ * Player getter.
+ * @return player
+ */
+    public Player getPlayer() {
         return player;
 
     }
-// parsing our rooms!
-    public void createRooms(String filename){
-    JSONParser parser = new JSONParser();
-      try {
-            ArrayList<Room> tempor = new ArrayList<>();
 
-            // taking our rooms and making them a jsonobject
-            Object obj2 = parser.parse(new FileReader(filename));
-            JSONObject rooms = (JSONObject) obj2;
-            //making an array of these jsonobjects
-            JSONArray roomsArr = (JSONArray) rooms.get("room");
 
-            int x = 0;
-            // parsing all of the room data and storing in array
-            for(Object o : roomsArr){
-              JSONObject oneRoom = (JSONObject)o;
-              Room newRoom = new Room();
-              newRoom.setPlayer(player);
-              parseRoom(oneRoom,rooms, newRoom);
-              tempor.add(x,newRoom);
-              x++;
-            }
-            // printing out our room details
-            setRoomList(tempor);
-
-      } catch(FileNotFoundException e) {
-          e.printStackTrace();
-      } catch (IOException e) {
-          e.printStackTrace();
-      } catch (ParseException e) {
-          e.printStackTrace();
-      }
-
-    }
-
-// assinging our rooms list
-    public void setRoomList(ArrayList<Room> roomies){
+/**
+ * Rooms ArrayList setter.
+ *@param roomies arraylist of rooms
+ */
+    public void setRoomList(ArrayList<Room> roomies) {
       roomZ = roomies;
     }
-// displays our rooms one after the other
-    public String displayAll(){
+
+/**
+ * Display all rooms one after the other.
+ *@return string of all the rooms.
+*/
+    public String displayAll() {
         int x = 0;
         String str = "";
         String temp;
-        for(x = 0; x<roomZ.size();x++){
-          Room room = roomZ.get(x);
-          temp = room.displayRoom();
+        for (Room r : roomZ) {
+          temp = r.displayRoom();
           str = str + "\n\n";
           str = str + temp;
         }
         return str;
     }
 
-    public void parseRoom(JSONObject jsonRooms, JSONObject jsonItems, Room room){
-      // counter variables mostly
-      int i = 0;
-      int c = 0;
-      int z = 0;
-      int u = 0;
-      // initializing all our doors
-      room.setDoor("N",0);
-      room.setDoor("E",0);
-      room.setDoor("S",0);
-      room.setDoor("W",0);
-      //  bunch of arraylists to parse into and out of
-     ArrayList<Item> tempItems = new ArrayList<>();
-     ArrayList<Point> points = new ArrayList<>();
-     ArrayList<Integer> identifs = new ArrayList<>();
-
-     room.setId(Integer.decode(jsonRooms.get("id").toString()));
-     room.setHeight(Integer.decode(jsonRooms.get("height").toString()));
-     room.setStart(jsonRooms.get("start").toString());
-     room.setWidth(Integer.decode(jsonRooms.get("width").toString()));
-     for(Object doors : (JSONArray) jsonRooms.get("doors")){
-       JSONObject jsonDoors = (JSONObject)doors;
-       String dir = jsonDoors.get("dir").toString();
-       Integer pos = Integer.decode(jsonDoors.get("id").toString());
-       room.setDoor(dir, pos);
-     }
-
-     for(Object loot : (JSONArray) jsonRooms.get("loot")){
-       JSONObject jsonLoot = (JSONObject)loot;
-
-       Integer x = Integer.decode(jsonLoot.get("x").toString());
-       Integer y = Integer.decode(jsonLoot.get("y").toString());
-       Integer tempID = Integer.decode(jsonLoot.get("id").toString());
-       Point point = new Point(x,y);
-       points.add(point);
-       identifs.add(tempID);
-     }
-
-      ArrayList<Integer> itemsID = new ArrayList<>();
-      ArrayList<String> itemsName = new ArrayList<>();
-      ArrayList<String> itemsType = new ArrayList<>();
-
-      for(Object itemz : (JSONArray) jsonItems.get("items")){
-        JSONObject jsonIt = (JSONObject) itemz;
-       Integer temp1 = Integer.decode(jsonIt.get("id").toString());
-       String temp2 = jsonIt.get("name").toString();
-       String temp3 = jsonIt.get("type").toString();
-       itemsID.add(temp1);
-       itemsName.add(temp2);
-       itemsType.add(temp3);
-}
-
-     for(c = 0;c < identifs.size();c++ ){
-       Integer j = identifs.get(c);
-       Integer v = j-1;
-       Item item = new Item(j, itemsName.get(v),itemsType.get(v),points.get(c));
-       tempItems.add(item);
-     }
-
-     room.setRoomItems(tempItems);
-
-     if(room.getStartBool() == true){
-       room.setPlayerinRoom();
-       player.setCurrentRoom(room);
-     }
-    }
-
-    public void printAllRoomInfo(){
-      int x = 0;
-      for(x = 0; x<roomZ.size();x++){
-        roomZ.get(x).printInfo();
+    /**
+    *print all the room info
+    */
+    public void printAllInfo() {
+      for(Room r : roomZ) {
+        r.printInfo();
       }
-      Room temporR = player.getCurrentRoom();
-      System.out.println("Player name: " + player.getName());
-      System.out.println("Player in room: " + temporR.getId());
-      Point temporP = player.getXyLocation();
-      System.out.println("Player loc: " + temporP.getX() + "," + temporP.getY());
     }
+
+
 }
