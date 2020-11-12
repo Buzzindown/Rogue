@@ -1,14 +1,14 @@
 package rogue;
 
 /**
-*not enoguh doors exception
+*not enoguh doors exception.
 */
-public class InvalidMoveException extends Exception{
+public class InvalidMoveException extends Exception {
 
   /**
-  *course not found
+  *course not found.
   */
-  public InvalidMoveException(){
+  public InvalidMoveException() {
     super("bad move.");
   }
 }

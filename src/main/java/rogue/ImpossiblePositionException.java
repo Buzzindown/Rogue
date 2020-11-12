@@ -1,14 +1,14 @@
 package rogue;
 
 /**
-*impossible position exception
+*impossible position exception.
 */
-public class ImpossiblePositionException extends Exception{
+public class ImpossiblePositionException extends Exception {
 
   /**
-  *course not found
+  *course not found.
   */
-  public ImpossiblePositionException(){
+  public ImpossiblePositionException() {
     super("impossible location exception.");
   }
 }

@@ -1,14 +1,14 @@
 package rogue;
 
 /**
-*no such item exception
+*no such item exception.
 */
-public class NoSuchItemException extends Exception{
+public class NoSuchItemException extends Exception {
 
   /**
-  *course not found
+  *course not found.
   */
-  public NoSuchItemException(){
+  public NoSuchItemException() {
     super("No such item exists.");
   }
 }

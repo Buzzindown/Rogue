@@ -1,23 +1,15 @@
 package rogue;
 import java.util.ArrayList;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.awt.Point;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import java.util.Map;
-import java.util.HashMap;
 /**
  * The rogue game class.
  */
 public class Rogue {
     private RogueParser parser;
     private ArrayList<Room> roomZ = new ArrayList<Room>();
-    private ArrayList<Map<String,String>> items;
-    private ArrayList<Map<String,String>> itemLocs;
+    private ArrayList<Map<String, String>> items;
+    private ArrayList<Map<String, String>> itemLocs;
     private ArrayList<Door> doors = new ArrayList<Door>();
     private Player player = new Player();
     private String msg;
@@ -36,8 +28,8 @@ public class Rogue {
     public static final char RIGHT = 'd';
 
 /**
-*adds a room to roomZ arraylist
-*@param toAdd the map of stuff
+*adds a room to roomZ arraylist.
+*@param toAdd the map of stuff.
 */
 
 public void addRoom(Map<String, String> toAdd) {
@@ -48,8 +40,8 @@ public void addRoom(Map<String, String> toAdd) {
   room.setHeight(Integer.parseInt(toAdd.get("height")));
   room.setWidth(Integer.parseInt(toAdd.get("width")));
   room.setSymbols(parser.retSymbols());
-  for(Door d : doors){
-    if(d.getRoomID() == room.getId()){
+  for (Door d : doors) {
+    if (d.getRoomID() == room.getId()) {
       room.addDoor(d);
     }
   }
@@ -57,64 +49,63 @@ public void addRoom(Map<String, String> toAdd) {
 }
 
 /**
-*returns the new display of the room
-*@return string of the new room
+*returns the new display of the room.
+*@return string of the new room.
 */
-public String getNextDisplay(){
+public String getNextDisplay() {
   Room r = player.getCurrentRoom();
   return r.displayRoom();
 }
 
 /**
-*returns the new display of the room
-*@return string of the new room
+*returns the new display of the room.
+*@return string of the new room.
 */
-public String getBlankDisplay(){
-  int x =0;
-  char[] temp = new char[1920];
-  for(x = 0; x < 1920; x++) {
-    temp[x] = ' ';
+public String getBlankDisplay() {
+  int s = 0;
+  final int screenSize = 1920;
+  char[] temp = new char[screenSize];
+  for (s = 0; s < screenSize; s++) {
+    temp[s] = ' ';
   }
   String str = new String(temp);
   return str;
 }
 
-private void moveDir(char input){
-  if(input == UP){
+private void moveDir(char input) {
+  if (input == UP) {
     y--;
     msg = "moved N";
-  }else if(input == DOWN){
+  } else if (input == DOWN) {
     y++;
     msg = "moved E";
-  }
-  else if(input == LEFT){
+  } else if (input == LEFT) {
     x--;
     msg = "moved W";
-  }else if(input == RIGHT){
+  } else if (input == RIGHT) {
     x++;
     msg = "moved S";
   }
 }
 
-private void moveDoorWest(){
-  for(Door h : doorss){
-    if((h.getWall()).equals("W")){
+private void moveDoorWest() {
+  for (Door h : doorss) {
+    if ((h.getWall()).equals("W")) {
       nextDoor = h;
       validDoor = true;
     }
   }
-  if(validDoor == true){
-    if(p.getY() == nextDoor.getLocation()){
+  if (validDoor) {
+    if (p.getY() == nextDoor.getLocation()) {
       Room newRoom = nextDoor.getConRoom();
       ArrayList<Door> m = newRoom.retDoor();
-      for(Door f : m){
-        if((f.getWall()).equals("E")){
+      for (Door f : m) {
+        if ((f.getWall()).equals("E")) {
           player.setCurrentRoom(newRoom);
-          p.setLocation(newRoom.getWidth()-2,f.getLocation());
+          p.setLocation(newRoom.getWidth() - 2, f.getLocation());
           player.setXyLocation(p);
           thruDoor = true;
           msg = msg + "...entered room: " + newRoom.getId();
-
         }
       }
     }
@@ -122,22 +113,22 @@ private void moveDoorWest(){
   goodMove = false;
 }
 
-private void moveDoorEast(){
+private void moveDoorEast() {
   //if we go into east wall
-  for(Door h : doorss){
-    if((h.getWall()).equals("E")){
+  for (Door h : doorss) {
+    if ((h.getWall()).equals("E")) {
       nextDoor = h;
       validDoor = true;
     }
   }
-  if(validDoor == true){
-      if(p.getY() == nextDoor.getLocation()){
+  if (validDoor) {
+      if (p.getY() == nextDoor.getLocation()) {
         Room newRoom = nextDoor.getConRoom();
         ArrayList<Door> m = newRoom.retDoor();
-        for(Door f : m){
-          if((f.getWall()).equals("W")){
+        for (Door f : m) {
+          if ((f.getWall()).equals("W")) {
             player.setCurrentRoom(newRoom);
-            p.setLocation(1,f.getLocation());
+            p.setLocation(1, f.getLocation());
             player.setXyLocation(p);
             thruDoor = true;
             msg = msg + "...entered room: " + newRoom.getId();
@@ -148,21 +139,21 @@ private void moveDoorEast(){
   goodMove = false;
 }
 
-private void moveDoorNorth(){
-  for(Door h : doorss){
-    if((h.getWall()).equals("N")){
+private void moveDoorNorth() {
+  for (Door h : doorss) {
+    if ((h.getWall()).equals("N")) {
       nextDoor = h;
       validDoor = true;
     }
   }
-  if(validDoor == true){
-    if(p.getX() == nextDoor.getLocation()){
+  if (validDoor) {
+    if (p.getX() == nextDoor.getLocation()) {
       Room newRoom = nextDoor.getConRoom();
       ArrayList<Door> m = newRoom.retDoor();
-      for(Door f : m){
-        if((f.getWall()).equals("S")){
+      for (Door f : m) {
+        if ((f.getWall()).equals("S")) {
           player.setCurrentRoom(newRoom);
-          p.setLocation(f.getLocation(),newRoom.getHeight()-2);
+          p.setLocation(f.getLocation(), newRoom.getHeight() - 2);
           player.setXyLocation(p);
           thruDoor = true;
           msg = msg + "...entered room: " + newRoom.getId();
@@ -173,21 +164,21 @@ private void moveDoorNorth(){
   goodMove = false;
 }
 
-private void moveDoorSouth(){
-  for(Door h : doorss){
-    if((h.getWall()).equals("S")){
+private void moveDoorSouth() {
+  for (Door h : doorss) {
+    if ((h.getWall()).equals("S")) {
       nextDoor = h;
       validDoor = true;
     }
   }
-  if(validDoor == true){
-      if(p.getX() == nextDoor.getLocation()){
+  if (validDoor) {
+      if (p.getX() == nextDoor.getLocation()) {
         Room newRoom = nextDoor.getConRoom();
         ArrayList<Door> m = newRoom.retDoor();
-        for(Door f : m){
-          if((f.getWall()).equals("N")){
+        for (Door f : m) {
+          if ((f.getWall()).equals("N")) {
             player.setCurrentRoom(newRoom);
-            p.setLocation(f.getLocation(),1);
+            p.setLocation(f.getLocation(), 1);
             player.setXyLocation(p);
             thruDoor = true;
             msg = msg + "...entered room: " + newRoom.getId();
@@ -196,68 +187,71 @@ private void moveDoorSouth(){
       }
     }
   goodMove = false;
+}
+
+private void pickupItem(Room r) {
+  if (!thruDoor) {
+    if (p.getX() > 0 && p.getX() < r.getWidth() - 1) {
+      if (p.getY() > 0 && p.getY() < r.getHeight() - 1) {
+        goodMove = true;
+        ArrayList<Item> roomIts = r.getRoomItems();
+        int itemIndex = -1;
+        for (Item remIt : roomIts) {
+          Point itemPoint = remIt.getXyLocation();
+          if (itemPoint.equals(player.getXyLocation())) {
+            itemIndex = roomIts.indexOf(remIt);
+            msg = "picked up: " + remIt.getName();
+            pickedItem = true;
+          }
+        }
+        if (itemIndex >= 0) {
+          roomIts.remove(itemIndex);
+        }
+      }
+    }
+  }
 }
 /**
-* moves the character
+* moves the character.
 *@param input userinput char
+*@throws InvalidMoveException except
 *@return a string for the player
 */
-public String makeMove(char input) throws InvalidMoveException{
+public String makeMove(char input) throws InvalidMoveException {
   Room r = player.getCurrentRoom();
   Point oldLoc = player.getXyLocation();
   nextDoor = null;
   doorss = r.retDoor();
    p = new Point();
-   x = (int)oldLoc.getX();
-   y = (int)oldLoc.getY();
+   x = (int) oldLoc.getX();
+   y = (int) oldLoc.getY();
   goodMove = true;
   thruDoor = false;
   validDoor = false;
   pickedItem = false;
    msg = "";
   moveDir(input);
-
-  p.setLocation(x,y);
-
-  if(p.getX() <= 0){
+  p.setLocation(x, y);
+  if (p.getX() <= 0) {
     moveDoorWest();
   }
-  if(p.getX() > r.getWidth()-2){
+  if (p.getX() > r.getWidth() - 2) {
     moveDoorEast();
   }
-  if(p.getY() <= 0){
+  if (p.getY() <= 0) {
     moveDoorNorth();
   }
   // south door
-  if(p.getY() > r.getHeight() - 2){
+  if (p.getY() > r.getHeight() - 2) {
     moveDoorSouth();
   }
-if(thruDoor == false){
-  if(p.getX() > 0 && p.getX() < r.getWidth() - 1){
-    if(p.getY() > 0 && p.getY() < r.getHeight() -1){
-      goodMove = true;
-      ArrayList<Item> roomIts= r.getRoomItems();
-      int itemIndex = -1;
-      for(Item remIt : roomIts){
-        Point itemPoint = remIt.getXyLocation();
-        if(itemPoint.equals(player.getXyLocation())){
-          itemIndex = roomIts.indexOf(remIt);
-          msg = "picked up: " + remIt.getName();
-          pickedItem = true;
-        }
-      }
-      if(itemIndex >= 0){
-        roomIts.remove(itemIndex);
-      }
-    }
-  }
-}
-  if(goodMove == true && thruDoor == false){
+  pickupItem(r);
+  if (goodMove && !thruDoor) {
     player.setXyLocation(p);
-    if(pickedItem == false){
+    if (!pickedItem) {
     msg = msg + ".....( " + p.getX() + " , " + p.getY() + " )";
     }
-  }else if(goodMove == false && thruDoor == false){
+  } else if (!goodMove && !thruDoor) {
     player.setXyLocation(oldLoc);
     throw new InvalidMoveException();
   }
@@ -266,38 +260,38 @@ if(thruDoor == false){
 
 
 /**
-*adds a item to items arraylist
+*adds a item to items arraylist.
 *@param toAdd the map of stuff
 */
 public void addItem(Map<String, String> toAdd) {
-    if(toAdd.containsKey("x") && toAdd.containsKey("y")){
+    if (toAdd.containsKey("x") && toAdd.containsKey("y")) {
     Item item = new Item();
-    Room room = roomZ.get(Integer.parseInt(toAdd.get("room"))-1);
+    Room room = roomZ.get(Integer.parseInt(toAdd.get("room")) - 1);
     item.setCurrentRoom(room);
     item.setId(Integer.parseInt(toAdd.get("id")));
-    int x = Integer.parseInt(toAdd.get("x"));
-    int y = Integer.parseInt(toAdd.get("y"));
-    Point p = new Point(x,y);
-    item.setXyLocation(p);
+    int xpos = Integer.parseInt(toAdd.get("x"));
+    int ypos = Integer.parseInt(toAdd.get("y"));
+    Point point = new Point(xpos, ypos);
+    item.setXyLocation(point);
 
     item.setDescription(toAdd.get("description"));
     item.setName(toAdd.get("name"));
     item.setType(toAdd.get("type"));
   // try and add item
-  try{
-    room.addItem(item);
-  }catch (NoSuchItemException d){
-    System.out.println("No such item with id: " + item.getId());
-    items.remove(toAdd);
-  }catch (ImpossiblePositionException e) {
-    item.setXyLocation(room.findEmptyTile());
-    room.addItemNE(item);
-  }
+    try {
+      room.addItem(item);
+    } catch (NoSuchItemException d) {
+      System.out.println("No such item with id: " + item.getId());
+      items.remove(toAdd);
+    } catch (ImpossiblePositionException e) {
+      item.setXyLocation(room.findEmptyTile());
+      room.addItemNE(item);
+    }
   }
 }
 
 /**
-* parser caller
+* parser caller.
 *@param theDungeonInfo parser
 */
     public Rogue(RogueParser theDungeonInfo) {
@@ -307,16 +301,16 @@ public void addItem(Map<String, String> toAdd) {
       items = parser.getItems();
       itemLocs = parser.getItemLocs();
       ArrayList<Map<String, String>> temp = parser.retRooms();
-      for(Map<String, String> roomMap : temp){
+      for (Map<String, String> roomMap : temp) {
         addRoom(roomMap);
       }
-      for(Room r : roomZ){
+      for (Room r : roomZ) {
         ArrayList<Door> d = r.retDoor();
-        for(Door door : d){
+        for (Door door : d) {
           ArrayList<Integer> in = door.getRoomNums();
-          for(Integer x : in){
-            for(Room z : roomZ){
-              if(z.getId() == x){
+          for (Integer s : in) {
+            for (Room z : roomZ) {
+              if (z.getId() == s) {
                 door.connectRoom(z);
               }
             }
@@ -324,17 +318,16 @@ public void addItem(Map<String, String> toAdd) {
         }
       }
 
-      for(Room r : roomZ){
+      for (Room r : roomZ) {
         doTheDoors(r);
-            if(r.getStartBool()){
+            if (r.getStartBool()) {
               player.setCurrentRoom(r);
             }
       }
-      for(Map<String, String> itemsMap : items) {
+      for (Map<String, String> itemsMap : items) {
         addItem(itemsMap);
       }
-      Room x = player.getCurrentRoom();
-
+      Room s = player.getCurrentRoom();
     }
 /**
  * Sets the games player.
@@ -345,64 +338,35 @@ public void addItem(Map<String, String> toAdd) {
 
     }
 
-    private void doTheDoors(Room r){
-      try{
+    private void doTheDoors(Room r) {
+      try {
           r.verifyRoom();
-      }catch(NotEnoughDoorsException b){
+      } catch (NotEnoughDoorsException b) {
         Boolean foundSpace = false;
-        for(Room z : roomZ){
-          if(foundSpace == false){
-            if(z.getId() != r.getId()){
+        for (Room z : roomZ) {
+          if (!foundSpace) {
+            if (z.getId() != r.getId()) {
                   ArrayList<Door> doorH = z.retDoor();
-                  // z is finding a room with less than 4 doors
-                  if(doorH.size() < 4){
-                    Boolean N = false;
-                    Boolean E = false;
-                    Boolean S = false;
-                    Boolean W = false;
-                    for(Door d : doorH){
+                  final int four = 4;
+                  if (doorH.size() < four) {
+                    Boolean n = false;
+                    Boolean e = false;
+                    Boolean s = false;
+                    Boolean w = false;
+                    for (Door d : doorH) {
                       String wall = d.getWall();
-                      if(wall.equals("N")){
-                        N = true;
-                      }
-                      if(wall.equals("E")){
-                        E = true;
-                      }
-                      if(wall.equals("S")){
-                        S = true;
-                      }
-                      if(wall.equals("W")){
-                        W = true;
-                      }
+                      setWallStatus(n,s,e,w,wall);
                     }
                     Door d = new Door();
                     Door j = new Door();
+                    ArrayList<Door> doorList = new ArrayList<>();
+                    doorList.add(d);
+                    doorList.add(j);
                     j.setCRN(z.getId());
                     d.setCRN(r.getId());
                     d.connectRoom(r);
                     j.connectRoom(z);
-                    if(N == false){
-                      d.setWall("N");
-                      j.setWall("S");
-                      d.setLocation(z.getWidth()/2);
-                      j.setLocation(r.getWidth()/2);
-
-                    }else if(E == false){
-                      d.setWall("E");
-                      j.setWall("W");
-                      d.setLocation(z.getHeight()/2);
-                      j.setLocation(r.getHeight()/2);
-                    }else if(S == false){
-                      d.setWall("S");
-                      j.setWall("N");
-                      d.setLocation(z.getWidth()/2);
-                      j.setLocation(r.getWidth()/2);
-                    }else if(W == false){
-                      d.setWall("W");
-                      j.setWall("E");
-                      d.setLocation(z.getHeight()/2);
-                      j.setLocation(r.getHeight()/2);
-                    }
+                    cDoor(n, e, s, w, doorList, z, r);
                     foundSpace = true;
                     z.addDoor(d);
                     r.addDoor(j);
@@ -410,12 +374,56 @@ public void addItem(Map<String, String> toAdd) {
                 }
               }
             }
-            if(foundSpace == false) {
+            if (!foundSpace) {
               System.out.println("This dungeon file cannot be used");
               System.exit(1);
             }
           }
     }
+
+private void setWallStatus(boolean n, boolean s, boolean e, boolean w,
+                                                    String wall) {
+      if (wall.equals("N")) {
+        n = true;
+      }
+      if (wall.equals("E")) {
+        e = true;
+      }
+      if (wall.equals("S")) {
+        s = true;
+      }
+      if (wall.equals("W")) {
+        w = true;
+      }
+    }
+
+private void cDoor(boolean n, boolean e, boolean s, boolean w,
+                              ArrayList<Door> doorList, Room z, Room r) {
+  Door d = doorList.get(0);
+  Door j = doorList.get(1);
+  if (!n) {
+    d.setWall("N");
+    j.setWall("S");
+    d.setLocation(z.getWidth() / 2);
+    j.setLocation(r.getWidth() / 2);
+
+  } else if (!e) {
+    d.setWall("E");
+    j.setWall("W");
+    d.setLocation(z.getHeight() / 2);
+    j.setLocation(r.getHeight() / 2);
+  } else if (!s) {
+    d.setWall("S");
+    j.setWall("N");
+    d.setLocation(z.getWidth() / 2);
+    j.setLocation(r.getWidth() / 2);
+  } else if (!w) {
+    d.setWall("W");
+    j.setWall("E");
+    d.setLocation(z.getHeight() / 2);
+    j.setLocation(r.getHeight() / 2);
+  }
+}
 /**
  * Rooms ArrayList getter.
  * @return ararylist of rooms
@@ -429,9 +437,8 @@ public void addItem(Map<String, String> toAdd) {
  * Items ArrayList getter.
  * @return arraylist of items
  */
-    public ArrayList<Map<String,String>> getItems() {
+    public ArrayList<Map<String, String>> getItems() {
         return items;
-
     }
 
 /**
@@ -457,7 +464,6 @@ public void addItem(Map<String, String> toAdd) {
  *@return string of all the rooms.
 */
     public String displayAll() {
-        int x = 0;
         String str = "";
         String temp;
         for (Room r : roomZ) {
@@ -469,10 +475,10 @@ public void addItem(Map<String, String> toAdd) {
     }
 
     /**
-    *print all the room info
+    *print all the room info.
     */
     public void printAllInfo() {
-      for(Room r : roomZ) {
+      for (Room r : roomZ) {
         r.printInfo();
       }
     }

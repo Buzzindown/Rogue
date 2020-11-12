@@ -1,14 +1,14 @@
 package rogue;
 
 /**
-*not enoguh doors exception
+*not enoguh doors exception.
 */
-public class NotEnoughDoorsException extends Exception{
+public class NotEnoughDoorsException extends Exception {
 
   /**
-  *course not found
+  *course not found.
   */
-  public NotEnoughDoorsException(){
+  public NotEnoughDoorsException() {
     super("not enough doors exception.");
   }
 }
