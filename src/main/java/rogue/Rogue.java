@@ -22,14 +22,15 @@ public class Rogue {
     private Boolean pickedItem;
     private Point p;
     private Door nextDoor;
-    private static final char UP = 'w';
-    private static final char DOWN = 's';
-    private static final char LEFT = 'a';
-    private static final char RIGHT = 'd';
-    private static final char UP2 = 'i';
-    private static final char DOWN2 = 'k';
-    private static final char LEFT2 = 'j';
-    private static final char RIGHT2 = 'l';
+    public static final char UP = 'w';
+    public static final char DOWN = 's';
+    public static final char LEFT = 'a';
+    public static final char RIGHT = 'd';
+    public static final char UP2 = 'i';
+    public static final char DOWN2 = 'k';
+    public static final char LEFT2 = 'j';
+    public static final char RIGHT2 = 'l';
+
 
 /**
 *adds a room to roomZ arraylist.
@@ -294,9 +295,9 @@ public void addItem(Map<String, String> toAdd) {
   }
 }
 /**
-*public rogue
+*public rogue.
 */
-    public Rogue(){
+    public Rogue() {
       System.out.println("make a new rogue with parser");
     }
 

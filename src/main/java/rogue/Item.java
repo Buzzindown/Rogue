@@ -18,7 +18,7 @@ public class Item  {
   * default constructor.
   */
     public Item() {
-      domSomething = true;
+      doSomething = true;
     }
 
   /**
