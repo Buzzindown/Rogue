@@ -173,7 +173,7 @@ The controller method for making the game logic work.
     try {
 
         message = theGame.makeMove(userInput);
-        theGameUI.draw(" ",theGame.getBlankDisplay());
+        theGameUI.draw(" ", theGame.getBlankDisplay());
         theGameUI.draw(message, theGame.getNextDisplay());
 
       } catch (InvalidMoveException badMove) {

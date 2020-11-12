@@ -32,8 +32,7 @@ public class RogueParser {
      * Default constructor.
      */
     public RogueParser() {
-
-
+      System.out.println("call again with a filename");
     }
 
     /**

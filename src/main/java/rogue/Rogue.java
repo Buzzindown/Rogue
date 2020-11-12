@@ -22,10 +22,14 @@ public class Rogue {
     private Boolean pickedItem;
     private Point p;
     private Door nextDoor;
-    public static final char UP = 'w';
-    public static final char DOWN = 's';
-    public static final char LEFT = 'a';
-    public static final char RIGHT = 'd';
+    private static final char UP = 'w';
+    private static final char DOWN = 's';
+    private static final char LEFT = 'a';
+    private static final char RIGHT = 'd';
+    private static final char UP2 = 'i';
+    private static final char DOWN2 = 'k';
+    private static final char LEFT2 = 'j';
+    private static final char RIGHT2 = 'l';
 
 /**
 *adds a room to roomZ arraylist.
@@ -73,16 +77,16 @@ public String getBlankDisplay() {
 }
 
 private void moveDir(char input) {
-  if (input == UP) {
+  if (input == UP || input == UP2) {
     y--;
     msg = "moved N";
-  } else if (input == DOWN) {
+  } else if (input == DOWN || input == DOWN2) {
     y++;
     msg = "moved E";
-  } else if (input == LEFT) {
+  } else if (input == LEFT || input == LEFT2) {
     x--;
     msg = "moved W";
-  } else if (input == RIGHT) {
+  } else if (input == RIGHT || input == RIGHT2) {
     x++;
     msg = "moved S";
   }
@@ -289,6 +293,12 @@ public void addItem(Map<String, String> toAdd) {
     }
   }
 }
+/**
+*public rogue
+*/
+    public Rogue(){
+      System.out.println("make a new rogue with parser");
+    }
 
 /**
 * parser caller.
@@ -355,7 +365,7 @@ public void addItem(Map<String, String> toAdd) {
                     Boolean w = false;
                     for (Door d : doorH) {
                       String wall = d.getWall();
-                      setWallStatus(n,s,e,w,wall);
+                      setWallStatus(n, s, e, w, wall);
                     }
                     Door d = new Door();
                     Door j = new Door();

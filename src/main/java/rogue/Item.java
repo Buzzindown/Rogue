@@ -13,11 +13,12 @@ public class Item  {
   private Point xyLocation;
   private Character displayCharacter;
   private String description;
-
+  private boolean doSomething;
   /**
   * default constructor.
   */
     public Item() {
+      domSomething = true;
     }
 
   /**
