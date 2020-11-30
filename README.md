@@ -27,7 +27,7 @@ Drop Down Menu
         It will then save the file to that directory. (This can and will overwrite other (possibly important) files, just a warning)
 
     Load Saved Game
-        Load Saved game implements serialization to deserialize a binary file into a rogue object.
+        Load Saved game implements serialization to deserialize(?) a binary file into a rogue object.
         The game will provide a popup if something goes wrong with loading the game, at which point you
         would have to try and load a new file. Once a file has been loaded, you must press a key on the keyboard
         for the actual game to recognize the new file and refresh the terminal.
