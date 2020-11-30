@@ -133,6 +133,7 @@ Constructor.
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(path));) {
           Rogue loadG = (Rogue) in.readObject();
           theGame = loadG;
+          JOptionPane.showMessageDialog(null, "Laoded file at: " + path, "", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException ex) {
               JFrame rent = new JFrame();
             JOptionPane.showMessageDialog(rent, "Failed to Load Game", "", JOptionPane.WARNING_MESSAGE);
@@ -165,6 +166,7 @@ Constructor.
         outputdest.writeObject(saveG);
         outputdest.close();
         outputStr.close();
+        JOptionPane.showMessageDialog(null, "Saved at: " + path, "", JOptionPane.INFORMATION_MESSAGE);
       } catch (IOException ex) {
         JFrame rent = new JFrame();
         JOptionPane.showMessageDialog(rent, "Failed to Save Game", "", JOptionPane.WARNING_MESSAGE);
