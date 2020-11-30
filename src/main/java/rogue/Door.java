@@ -1,9 +1,11 @@
 package rogue;
 import java.util.ArrayList;
+import java.io.Serializable;
 /**
  * A door in the dunegon walls.
  */
-public class Door  {
+public class Door implements Serializable {
+  private static final long serialVersionUID = -2655797264737116798L;
   private ArrayList<Room> conRooms;
   private ArrayList<Integer> connRoomNums;
   private Integer location;

@@ -28,6 +28,9 @@ public class RogueParser {
     private int numOfRooms = -1;
     private int numOfItems = -1;
 
+    private JSONObject roomsJSON;
+    private JSONObject symbolsJSON;
+
     /**
      * Default constructor.
      */
@@ -40,7 +43,6 @@ public class RogueParser {
      * @param filename  (String) name of file that contains file location for rooms and symbols
      */
     public RogueParser(String filename) {
-
         parse(filename);
     }
 
@@ -49,7 +51,6 @@ public class RogueParser {
      * @return (Map) Information about a room
      */
     public Map nextRoom() {
-
         if (roomIterator.hasNext()) {
             return roomIterator.next();
         } else {
@@ -62,17 +63,15 @@ public class RogueParser {
      * @return (Map) Information about an item
      */
     public Map nextItem() {
-
         if (itemIterator.hasNext()) {
             return itemIterator.next();
         } else {
             return null;
         }
-
     }
 
     /**
-     * Returns the next item.
+     * rooms map.
      * @return (Map) Information about an item
      */
     public ArrayList<Map<String, String>> retRooms() {
@@ -104,7 +103,7 @@ public class RogueParser {
      }
 
      /**
-      * Returns the itemlocs arrlist.
+      * Returns the item arrlist.
       * @return itemlocs
       */
       public ArrayList<Map<String, String>> getItems() {
@@ -117,12 +116,9 @@ public class RogueParser {
      * @return (Character) Display character for the symbol
      */
     public Character getSymbol(String symbolName) {
-
         if (symbols.containsKey(symbolName)) {
             return symbols.get(symbolName);
         }
-
-        // Does not contain the key
         return null;
     }
 
@@ -131,7 +127,6 @@ public class RogueParser {
      * @return (int) Number of items
      */
     public int getNumOfItems() {
-
         return numOfItems;
     }
 
@@ -140,7 +135,6 @@ public class RogueParser {
      * @return (int) Number of rooms
      */
     public int getNumOfRooms() {
-
         return numOfRooms;
     }
 
@@ -149,35 +143,17 @@ public class RogueParser {
      * @param filename (String) Name of the file
      */
     private void parse(String filename) {
-
         JSONParser parser = new JSONParser();
-        JSONObject roomsJSON;
-        JSONObject symbolsJSON;
-
         try {
             Object obj = parser.parse(new FileReader(filename));
             JSONObject configurationJSON = (JSONObject) obj;
-
-            // Extract the Rooms value from the file to get the file location for rooms
             String roomsFileLocation = (String) configurationJSON.get("Rooms");
-
-            // Extract the Symbols value from the file to get the file location for symbols-map
             String symbolsFileLocation = (String) configurationJSON.get("Symbols");
-
             Object roomsObj = parser.parse(new FileReader(roomsFileLocation));
             roomsJSON = (JSONObject) roomsObj;
-
             Object symbolsObj = parser.parse(new FileReader(symbolsFileLocation));
             symbolsJSON = (JSONObject) symbolsObj;
-
-
-            extractRoomInfo(roomsJSON);
-            extractItemInfo(roomsJSON);
-            extractSymbolInfo(symbolsJSON);
-
-            roomIterator = rooms.iterator();
-            itemIterator = items.iterator();
-
+            extractAndIterate();
         } catch (FileNotFoundException e) {
             System.out.println("Cannot find file named: " + filename);
         } catch (IOException e) {
@@ -185,16 +161,20 @@ public class RogueParser {
         } catch (ParseException e) {
             System.out.println("Error parsing JSON file");
         }
+    }
 
+    private void extractAndIterate() {
+      extractRoomInfo();
+      extractItemInfo();
+      extractSymbolInfo();
+      roomIterator = rooms.iterator();
+      itemIterator = items.iterator();
     }
 
     /**
      * Get the symbol information.
-     * @param symbolsJSON  (JSONObject) Contains information about the symbols
      */
-    private void extractSymbolInfo(JSONObject symbolsJSON) {
-
-
+    private void extractSymbolInfo() {
         JSONArray symbolsJSONArray = (JSONArray) symbolsJSON.get("symbols");
 
         // Make an array list of room information as maps
@@ -206,9 +186,8 @@ public class RogueParser {
 
     /**
      * Get the room information.
-     * @param roomsJSON (JSONObject) Contains information about the rooms
      */
-    private void extractRoomInfo(JSONObject roomsJSON) {
+    private void extractRoomInfo() {
 
 
         JSONArray roomsJSONArray = (JSONArray) roomsJSON.get("room");
@@ -228,15 +207,8 @@ public class RogueParser {
      * @return (Map<String, String>) Contains key/values that has information about the room
      */
     private Map<String, String> singleRoom(JSONObject roomJSON) {
-
         HashMap<String, String> room = new HashMap<>();
-        String x = roomJSON.get("id").toString();
-        room.put("id", x);
-        room.put("start", roomJSON.get("start").toString());
-        room.put("height", roomJSON.get("height").toString());
-        room.put("width", roomJSON.get("width").toString());
-
-        // Update the map with any doors in the room
+        putRoomTogether(roomJSON, room);
         JSONArray doorArray = (JSONArray) roomJSON.get("doors");
         for (int j = 0; j < doorArray.size(); j++) {
             JSONObject doorObj = (JSONObject) doorArray.get(j);
@@ -244,20 +216,29 @@ public class RogueParser {
             String dir = String.valueOf(doorObj.get("dir"));
             int loc = Integer.parseInt(String.valueOf(doorObj.get("wall_pos")));
             int conRoom = Integer.parseInt(String.valueOf(doorObj.get("con_room")));
-            d.setWall(dir);
-            d.setLocation(loc);
-            d.setCRN(conRoom);
-            d.setRoomId(Integer.parseInt(x));
+            setRoomQualities(dir, loc, conRoom, d);
+            d.setRoomId(Integer.parseInt(room.get("id")));
             doors.add(d);
         }
-
         JSONArray lootArray = (JSONArray) roomJSON.get("loot");
-        // Loop through each item and update the hashmap
         for (int j = 0; j < lootArray.size(); j++) {
             itemLocations.add(itemPosition((JSONObject) lootArray.get(j), roomJSON.get("id").toString()));
         }
-
         return room;
+    }
+
+    private void setRoomQualities(String dir, int loc, int conRoom, Door d) {
+      d.setWall(dir);
+      d.setLocation(loc);
+      d.setCRN(conRoom);
+    }
+
+    private void putRoomTogether(JSONObject roomJSON, HashMap<String, String> room) {
+      String x = roomJSON.get("id").toString();
+      room.put("id", x);
+      room.put("start", roomJSON.get("start").toString());
+      room.put("height", roomJSON.get("height").toString());
+      room.put("width", roomJSON.get("width").toString());
     }
 
     /**
@@ -280,9 +261,8 @@ public class RogueParser {
 
     /**
      * Get the Item information from the Item key.
-     * @param roomsJSON (JSONObject) The entire JSON file that contains keys for room and items
      */
-    private void extractItemInfo(JSONObject roomsJSON) {
+    private void extractItemInfo() {
 
         JSONArray itemsJSONArray = (JSONArray) roomsJSON.get("items");
 
@@ -298,7 +278,6 @@ public class RogueParser {
      * @return (Map<String, String>) Contains information about a single item
      */
     private Map<String, String>  singleItem(JSONObject itemsJSON) {
-
         HashMap<String, String> item = new HashMap<>();
         item.put("id", itemsJSON.get("id").toString());
         item.put("name", itemsJSON.get("name").toString());
@@ -314,10 +293,7 @@ public class RogueParser {
                 item.put("y", itemLocation.get("y"));
                 break;
             }
-
         }
-
         return item;
-
     }
 }

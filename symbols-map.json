@@ -1,23 +1,23 @@
 {
     "symbols": [
         {
-            "name": "PASSAGE", 
+            "name": "PASSAGE",
             "symbol": "#"
         },
         {
-            "name": "DOOR", 
+            "name": "DOOR",
             "symbol": "+"
         },
         {
-            "name": "FLOOR", 
+            "name": "FLOOR",
             "symbol": "."
         },
         {
-            "name": "PLAYER", 
+            "name": "PLAYER",
             "symbol": "@"
         },
         {
-            "name": "ITEM",
+            "name": "GOLD",
             "symbol": "*"
         },
          {
@@ -27,6 +27,30 @@
          {
             "name": "EW_WALL",
             "symbol": "|"
-        }                 
+        },
+                {
+            "name": "POTION",
+            "symbol": "!"
+        },
+                {
+            "name": "SCROLL",
+            "symbol": "?"
+        },
+                {
+            "name": "CLOTHING",
+            "symbol": "]"
+        },
+                       {
+            "name": "FOOD",
+            "symbol": ":"
+        },
+        {
+        "name": "RING",
+        "symbol": "^"
+        },
+        {
+        "name": "SMALLFOOD",
+        "symbol": ";"
+        },
     ]
 }

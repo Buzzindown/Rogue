@@ -1,5 +1,4 @@
 package rogue;
-
 /**
 *impossible position exception.
 */

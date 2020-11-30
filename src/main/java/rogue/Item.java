@@ -1,11 +1,11 @@
 package rogue;
 import java.awt.Point;
-
+import java.io.Serializable;
 /**
  * A basic Item class; basic functionality for both consumables and equipment.
  */
-public class Item  {
-
+public class Item implements Serializable {
+  private static final long serialVersionUID = 3294804420069126934L;
   private Integer identif;
   private Room curRoom;
   private String name;
@@ -14,11 +14,91 @@ public class Item  {
   private Character displayCharacter;
   private String description;
   private boolean doSomething;
+  private boolean edible = false;
+  private boolean wearable = false;
+  private boolean tossable = false;
   /**
   * default constructor.
   */
     public Item() {
       doSomething = true;
+    }
+
+  /**
+  * set edible.
+  */
+    public void setEdible() {
+      edible = true;
+    }
+
+    /**
+    * set wearable.
+    */
+    public void setWearable() {
+      wearable = true;
+    }
+
+    /**
+    * set Tossable.
+    */
+    public void setTossable() {
+      tossable = true;
+    }
+
+    /**
+    *get edible.
+    *@return edible
+    */
+    public Boolean getEdible() {
+      return edible;
+    }
+
+    /**
+    *get wearable.
+    *@return wearable
+    */
+    public Boolean getWearable() {
+      return wearable;
+    }
+
+    /**
+    *get tossable.
+    *@return tossable
+    */
+    public Boolean getTossable() {
+      return tossable;
+    }
+
+    /**
+    * default wear.
+    * @return wear default string
+    */
+    public String wear() {
+      return "Nope don't try and wear that";
+    }
+
+    /**
+    * default eat.
+    * @return eat default string
+    */
+    public String eat() {
+      return "Why would you try and eat that";
+    }
+
+    /**
+    * default toss.
+    * @return toss default string
+    */
+    public String toss() {
+      return "Do not throw that!!!";
+    }
+
+    /**
+    *set abilities for multi implementing items.
+    */
+    public void setAbilities() {
+      edible = false;
+      tossable = false;
     }
 
   /**
@@ -75,6 +155,7 @@ public class Item  {
         return type;
 
     }
+
 
 /**
 *type setter for item class.

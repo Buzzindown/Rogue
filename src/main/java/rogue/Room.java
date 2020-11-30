@@ -3,11 +3,14 @@ import java.util.ArrayList;
 import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.Serializable;
+
 /**
  * A room within the dungeon - contains monsters, treasure,
  * doors out, etc.
  */
-public class Room  {
+public class Room implements Serializable {
+  private static final long serialVersionUID = 2426928157109291125L;
   private int width;
   private int height;
   private int id;
@@ -16,38 +19,61 @@ public class Room  {
   private Map<String, Door> door;
   private HashMap<String, Character> symbols;
   private Player player;
+  private boolean isPiNR;
   private ArrayList<Door> returningDoors;
-
-
+  private int xx = 0;
+  private int yy = 0;
+  private char tb;
+  private char lr;
+  private char itemZ;
+  private char plyr;
+  private char flr;
+  private char dr;
+  private char gold;
+  private char ptn;
+  private char scroll;
+  private char clthing;
+  private char food;
+  private char ring;
+  private char smallf;
+  private int zz;
 /**
 *find a empty tile.
 *@return a point to move our item to
 */
 public Point findEmptyTile() {
-  int x = 0;
-  int y = 0;
   Point ret = new Point(1, 1);
   Point play = player.getXyLocation();
-  int blank = 0;
-  for (y = 1; y < height - 1; y++) {
-    for (x = 1; x < width - 1; x++) {
-      Point temp = new Point(x, y);
+  for (yy = 1; yy < height - 1; yy++) {
+    for (xx = 1; xx < width - 1; xx++) {
+      Point temp = new Point(xx, yy);
       if (!roomItems.isEmpty()) {
           for (Item e : roomItems) {
-            if (!(temp.equals(e.getXyLocation()))) {
-              if (!(temp.equals(play))) {
-
+            if ((!(temp.equals(e.getXyLocation()))) && (!(temp.equals(play)))) {
               ret = temp;
-              }
             }
           }
         } else {
                 ret = temp;
         }
-
     }
   }
   return ret;
+}
+
+/**
+*@return if play is in room.
+*/
+public Boolean isPlayerInRoom() {
+  return isPiNR;
+}
+
+/**
+*set if player is in room.
+*@param b
+*/
+public void setPlayerInRoom(Boolean b) {
+  isPiNR = b;
 }
 
 /**
@@ -57,6 +83,7 @@ public Point findEmptyTile() {
   roomItems = new ArrayList<Item>();
   door = new HashMap<String, Door>();
   returningDoors = new ArrayList<Door>();
+  isPiNR = false;
  }
 
  /**
@@ -128,31 +155,20 @@ public Point findEmptyTile() {
  */
  public void addItem(Item toAdd) throws ImpossiblePositionException, NoSuchItemException {
    Point p = toAdd.getXyLocation();
-
-   if (p == null) {
+   if ((p == null) || (toAdd.getCurrentRoom() == null)) {
      throw new NoSuchItemException();
    }
-   if (toAdd.getCurrentRoom() == null) {
-     throw new NoSuchItemException();
-   }
-   if (p.getX() > width - 2 || p.getX() < 1) {
-     throw new ImpossiblePositionException();
-   }
-   if (p.getY() > height - 2 || p.getY() < 1) {
+   if ((p.getX() > width - 2 || p.getX() < 1) || (p.getY() > height - 2 || p.getY() < 1)) {
      throw new ImpossiblePositionException();
    }
    for (Item e : roomItems) {
      Point p2 = e.getXyLocation();
      Point p3 = toAdd.getXyLocation();
-     if (p2.equals(p3)) {
+        p = player.getXyLocation();
+     if ((p2.equals(p3)) || (p.equals(toAdd.getXyLocation()))) {
        throw new ImpossiblePositionException();
      }
    }
-   p = player.getXyLocation();
-   if (p.equals(toAdd.getXyLocation())) {
-     throw new ImpossiblePositionException();
-   }
-
    roomItems.add(toAdd);
  }
 
@@ -265,9 +281,9 @@ public boolean getStartBool() {
    player = newPlayer;
  }
 
-/**
+/*
 * Debug method that prints json parsed info about a room.
-*/
+
  public void printInfo() {
    int i = 0;
    System.out.println("Room id: " + id);
@@ -298,7 +314,7 @@ public boolean getStartBool() {
    }
    System.out.println();
  }
-
+*/
 
 
 /**
@@ -312,45 +328,39 @@ public boolean getStartBool() {
       String head2 = "- Starting Room\n";
       head = head + head2;
     }
-    // this is our output string its + 1 width to fit a newline char
     char[] output = new char[(width + 1) * height];
-    // getting all of our symbols for printing
-    char tb = symbols.get("NS_WALL");
-    char lr = symbols.get("EW_WALL");
-    char itemZ = symbols.get("ITEM");
-    char plyr = symbols.get("PLAYER");
-    char flr = symbols.get("FLOOR");
-    char dr = symbols.get("DOOR");
-
-    output = printBaseRoom(output, tb, lr, flr);
-    // setting our item locations
-   output = printItemsPlayer(output, itemZ, flr, plyr);
-// printing our door locations
-   output = printDoors(output, dr);
-// putting our head and string together
+    setSymbolsforRooms();
+    output = printBaseRoom(output);
+   output = printItemsPlayer(output);
+   output = printDoors(output);
   String str = String.valueOf(output);
   str = head + str;
   return str;
    }
 
-  private char[] printItemsPlayer(char[] output, char itemZ, char flr, char plyr) {
+   private void setSymbolsforRooms() {
+      tb = symbols.get("NS_WALL");
+      lr = symbols.get("EW_WALL");
+      plyr = symbols.get("PLAYER");
+      flr = symbols.get("FLOOR");
+      dr = symbols.get("DOOR");
+      gold = symbols.get("GOLD");
+      ptn = symbols.get("POTION");
+      scroll = symbols.get("SCROLL");
+      clthing = symbols.get("CLOTHING");
+      food = symbols.get("FOOD");
+      ring = symbols.get("RING");
+      smallf = symbols.get("SMALLFOOD");
+
+   }
+
+  private char[] printItemsPlayer(char[] output) {
     int x = 0;
-    int p = 0;
-    for (p = 0; p < roomItems.size(); p++) {
-      Item item = roomItems.get(p);
-      Point point = item.getXyLocation();
-      int h = (int) point.getX();
-      int j = (int) point.getY();
-      int location = ((width + 1) * j) + h;
-      // item character
-      output[location] = itemZ;
-    }
-    // used in loop for placing character
+    setItemSpots(output);
     boolean playerNSet = true;
     x = 0;
     int hightMod = 0;
     int widMod = 0;
-
     Room r = player.getCurrentRoom();
     if (r.getId() == id) {
       int h = width + 1;
@@ -362,81 +372,120 @@ public boolean getStartBool() {
     return output;
   }
 
-  private char[] printBaseRoom(char[] output, char tb, char lr, char flr) {
-    int x = 0;
-    int z = 0;
+  private void setItemSpots(char[] output) {
     int p = 0;
-
-    for (z = 0; z < width; z++) {
-        output[x] = tb;
-        x++;
+    for (p = 0; p < roomItems.size(); p++) {
+      Item item = roomItems.get(p);
+      Point point = item.getXyLocation();
+      int h = (int) point.getX();
+      int j = (int) point.getY();
+      int location = ((width + 1) * j) + h;
+      char symb = setItemSymb(item);
+      output[location] = symb;
     }
-    // newline
-      output[x] = '\n';
-      x++;
-    for (z = 0; z < height - 2; z++) {
-      // left wall character
+  }
+
+  private char setItemSymb(Item item) {
+    String type = item.getType();
+    type = type.toUpperCase();
+    char symbol = 'F';
+    symbol = symbols.get(type);
+    return symbol;
+  }
+
+  private char[] printBaseRoom(char[] output) {
+    int x = 0;
+    int p = 0;
+    buildRoomTopFlr(x, output);
+    x = width + 1;
+    for (zz = 0; zz < height - 2; zz++) {
       output[x] = lr;
       x++;
       for (p = 0; p < width - 2; p++) {
-        // floor character
         output[x] = flr;
         x++;
       }
-      // right wall character
       output[x] = lr;
       x++;
       output[x] = '\n';
       x++;
     }
-    for (z = 0; z < width; z++) {
-      // bottom wall character
+    buildRoomBotFlr(x, output);
+    return output;
+  }
+
+  private void buildRoomTopFlr(int x, char[] output) {
+    for (zz = 0; zz < width; zz++) {
         output[x] = tb;
         x++;
     }
       output[x] = '\n';
       x++;
+  }
+
+  private void buildRoomBotFlr(int x, char[] output) {
+    for (zz = 0; zz < width; zz++) {
+        output[x] = tb;
+        x++;
+    }
+      output[x] = '\n';
+      x++;
+  }
+
+
+  private char[] printDoors(char[] output) {
+  int k = 0;
+  for (Door d : door.values()) {
+    setDoorNorth(d, output);
+    setDoorEast(d, output);
+    setDoorSouth(d, output);
+    setDoorWest(d, output);
+
+}
 
     return output;
   }
 
-
-  private char[] printDoors(char[] output, char dr) {
-  int k = 0;
-  for (Door d : door.values()) {
+  private void setDoorNorth(Door d, char[] output) {
     int val = d.getLocation();
     if (d.getWall().equals("N")) {
       if (val > 0) {
         output[val] = dr;
       }
     }
+  }
+
+  private void setDoorEast(Door d, char[] output) {
+    int val = d.getLocation();
+    int k = 0;
     if (d.getWall().equals("E")) {
       if (val > 0) {
-        if (val > 0) {
           k = (width + 1) * (val + 1) - 2;
           output[k] = dr;
-        }
       }
     }
+  }
+
+  private void setDoorSouth(Door d, char[] output) {
+    int val = d.getLocation();
+    int k = 0;
     if (d.getWall().equals("S")) {
       if (val > 0) {
-        if (val > 0) {
           k = (width + 1) * (height - 1) + val;
           output[k] = dr;
-        }
       }
     }
+  }
+
+  private void setDoorWest(Door d, char[] output) {
+    int val = d.getLocation();
+    int k = 0;
     if (d.getWall().equals("W")) {
       if (val > 0) {
-        if (val > 0) {
           k = ((width + 1) * (val));
           output[k] = dr;
-        }
       }
     }
-}
-
-    return output;
   }
 
 }
