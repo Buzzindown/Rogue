@@ -40,14 +40,19 @@ OTHER\
   EAT: J\
   WEAR: K\
   TOSS: M
-  
+
 SELECTING ITEMS/MENUES\
   MOUSE
-  
+
 ## Next Steps
 - Adding enemies
 - Adding weapons
 - Adding health/armor indicators
 - Add functionality for load new json file
-- Possible random room/level generator 
+- Possible random room/level generator
 - Score indicator based on rooms visited/enemies killed
+
+## Sample gif
+
+
+![](sample.gif)

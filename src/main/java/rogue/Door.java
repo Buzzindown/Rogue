@@ -89,7 +89,7 @@ public String getWall() {
 /**
 *specifies one of the two rooms that can be attached to a door.
 public void connectRoom(Room r).
-*@param room to be added.
+*@param r room to be added.
 */
 public void connectRoom(Room r) {
   conRooms.add(r);
