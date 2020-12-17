@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.io.Serializable;
 /**
  * A door in the dunegon walls.
+ * doors are designed to be able to connect to more than one room,
+ * that functionality isn't built in yet though.
  */
 public class Door implements Serializable {
   private static final long serialVersionUID = -2655797264737116798L;
@@ -21,15 +23,15 @@ public Door() {
 }
 
 /**
-*sets newLoc.
-*@param newLoc newloc.
+*sets new location.
+*@param newLoc Integer position on a wall.
 */
 public void setLocation(Integer newLoc) {
   location = newLoc;
 }
 
 /**
-*sets newLoc.
+*sets the room number (room id) that the door is in.
 *@param rN newloc.
 */
 public void setCRN(Integer rN) {
@@ -45,7 +47,7 @@ public void setRoomId(Integer rI) {
 }
 
 /**
-*sets newLoc.
+*sets the id of the room this door is in.
 *@return doors room id.
 */
 public Integer getRoomID() {
@@ -53,7 +55,7 @@ public Integer getRoomID() {
 }
 
 /**
-*get roomsNums.
+*get get the roomnumbers.
 *@return gets location.
 */
 public ArrayList<Integer> getRoomNums() {
@@ -61,7 +63,7 @@ public ArrayList<Integer> getRoomNums() {
 }
 
 /**
-*sets newwall.
+*sets the NESW wall that the door is on.
 *@param newWall newwall.
 */
 public void setWall(String newWall) {
@@ -69,7 +71,7 @@ public void setWall(String newWall) {
 }
 
 /**
-*get location.
+*get location on hte wall.
 *@return gets location.
 */
 public Integer getLocation() {
@@ -77,8 +79,8 @@ public Integer getLocation() {
 }
 
 /**
-*get Wall.
-*@return get wall.
+*gets the NESW wall that the door is on.
+*@return NESW wall.
 */
 public String getWall() {
   return wall;
@@ -87,7 +89,7 @@ public String getWall() {
 /**
 *specifies one of the two rooms that can be attached to a door.
 public void connectRoom(Room r).
-*@param r r
+*@param room to be added.
 */
 public void connectRoom(Room r) {
   conRooms.add(r);
@@ -102,7 +104,7 @@ public ArrayList<Room> getConnectedRooms() {
 }
 
 /**
-*get first con room.
+*get first connected room.
 *@return a con rooms.
 */
 public Room getConRoom() {

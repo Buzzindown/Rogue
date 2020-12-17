@@ -2,6 +2,9 @@ package rogue;
 import java.util.ArrayList;
 import java.io.Serializable;
 
+/**
+* This class is used to implement a player's inventory.
+*/
 public class Inventory implements Serializable {
   private static final long serialVersionUID = 2123804758704638867L;
   private ArrayList<Item> items;
@@ -15,7 +18,7 @@ public class Inventory implements Serializable {
 
   /**
   *add item to inventory.
-  *@param item item to add
+  *@param item to add
   */
   public void addItem(Item item) {
     items.add(item);
@@ -23,7 +26,7 @@ public class Inventory implements Serializable {
 
   /**
   *remove item from inventory.
-  *@param item item to remove
+  *@param item to remove
   */
   public void removeItem(Item item) {
     if (items.contains(item)) {

@@ -82,6 +82,7 @@ public String getBlankDisplay() {
   return str;
 }
 
+// return a msg indicating which way the player moved
 private void moveDir(char input) {
   if (input == UP) {
     y--;
@@ -98,6 +99,7 @@ private void moveDir(char input) {
   }
 }
 
+// moving a player through the west door of a room
 private void moveDoorWest() {
   moveDoorWestFinder();
   if (validDoor) {
@@ -119,6 +121,7 @@ private void moveDoorWest() {
   goodMove = false;
 }
 
+// find if there's a west door in a room
 private void moveDoorWestFinder() {
   for (Door h : doorss) {
     if ((h.getWall()).equals("W")) {
@@ -128,6 +131,7 @@ private void moveDoorWestFinder() {
   }
 }
 
+// moving player through the east door of a room
 private void moveDoorEast() {
   moveDoorEastFinder();
   if (validDoor) {
@@ -149,6 +153,7 @@ private void moveDoorEast() {
   goodMove = false;
 }
 
+// check if there's a valid east door in a room
 private void moveDoorEastFinder() {
   //if we go into east wall
   for (Door h : doorss) {
@@ -159,6 +164,7 @@ private void moveDoorEastFinder() {
   }
 }
 
+// move a player through the north door
 private void moveDoorNorth() {
 moveDoorNorthFinder();
   if (validDoor) {
@@ -180,6 +186,7 @@ moveDoorNorthFinder();
   goodMove = false;
 }
 
+// check if there's a north door
 private void moveDoorNorthFinder() {
   for (Door h : doorss) {
     if ((h.getWall()).equals("N")) {
@@ -189,6 +196,7 @@ private void moveDoorNorthFinder() {
   }
 }
 
+// move the player through a south door
 private void moveDoorSouth() {
   moveDoorSouthFinder();
   if (validDoor) {
@@ -210,6 +218,7 @@ private void moveDoorSouth() {
   goodMove = false;
 }
 
+// check if there's a south door
 private void moveDoorSouthFinder() {
   for (Door h : doorss) {
     if ((h.getWall()).equals("S")) {
@@ -219,6 +228,7 @@ private void moveDoorSouthFinder() {
   }
 }
 
+// pick up an item off the floor of a room.
 private void pickupItem(Room r) {
   if (!thruDoor) {
     if ((p.getX() > 0 && p.getX() < r.getWidth() - 1)  && (p.getY() > 0 && p.getY() < r.getHeight() - 1)) {
@@ -226,6 +236,7 @@ private void pickupItem(Room r) {
         ArrayList<Item> roomIts = r.getRoomItems();
         int itemIndex = -1;
         for (Item remIt : roomIts) {
+          // removing an item from the floor n putting in plr inventory.
           Point itemPoint = remIt.getXyLocation();
           if (itemPoint.equals(player.getXyLocation())) {
             itemIndex = roomIts.indexOf(remIt);
@@ -240,6 +251,7 @@ private void pickupItem(Room r) {
   }
 }
 
+// putting an item in players inventory
 private void pickItemAndSet(Item item) {
     pickedItem = true;
     player.addToInv(item);
@@ -272,6 +284,7 @@ public String makeMove(char input, String itemName) throws InvalidMoveException 
   return msg;
 }
 
+// reset a lot of our variables to prepare for another move
 private void setUpToMakeMove(Point oldLoc, Room r, char input) {
   initializeMoveVals(oldLoc);
   moveDir(input);
@@ -280,6 +293,7 @@ private void setUpToMakeMove(Point oldLoc, Room r, char input) {
   pickupItem(r);
 }
 
+// appropriately handle stuff if the player wants to eat/wear/throw an item
 private String eatWearThrow(String string, char inputchar) {
   String str = " ";
   // eat
@@ -293,6 +307,7 @@ private String eatWearThrow(String string, char inputchar) {
   return str;
 }
 
+// handle if the player tries to toss an item
 private String tryToTossItem(String string) {
   String str;
   ArrayList<Item> plyrItems = player.getInvList();
@@ -309,6 +324,7 @@ private String tryToTossItem(String string) {
   return " ";
 }
 
+// if a player tosses an item, put it back in that room (in no specific position)
 private void putItemBackinRoom(Item e) {
   Room room = player.getCurrentRoom();
   try {
@@ -321,6 +337,7 @@ private void putItemBackinRoom(Item e) {
   }
 }
 
+//handle if the player tries to wear an item
 private String tryToWearItem(String string) {
   String str;
   ArrayList<Item> plyrItems = player.getInvList();
@@ -336,6 +353,7 @@ private String tryToWearItem(String string) {
     return " ";
 }
 
+// handle if the player tries to eat an item
 private String tryToEatItem(String string) {
   String str;
   ArrayList<Item> plyrItems = player.getInvList();
@@ -351,6 +369,7 @@ private String tryToEatItem(String string) {
     return " ";
 }
 
+// set variables so that we can prepare to make another move
 private void initializeMoveVals(Point oldLoc) {
     p = new Point();
   nextDoor = null;
@@ -363,6 +382,7 @@ private void initializeMoveVals(Point oldLoc) {
    msg = "";
 }
 
+// checking if the player has gone through any doors
 private void moveAllDoors(Room r) {
   if (p.getX() <= 0) {
     moveDoorWest();
@@ -404,7 +424,7 @@ public void addItem(Map<String, String> toAdd) {
 }
 
 
-
+// creating an actual item object from our parsed map of qualities
 private Item settingItem(Map<String, String> toAdd) {
   Item item = createRightItem(toAdd.get("type"));
   item.setId(Integer.parseInt(toAdd.get("id")));
@@ -421,6 +441,7 @@ private Item settingItem(Map<String, String> toAdd) {
   return item;
 }
 
+//create the right sublass of item
 private Item createRightItem(String type) {
   if (type.equalsIgnoreCase("Food")) {
     return new Food();
@@ -475,6 +496,8 @@ private Item createRightItem(String type) {
       itemLocs = parser.getItemLocs();
     }
 
+    // check that every room has a door connected to another room
+    // if that room isn't connected, find a way to connect it
     private void checkAllDoorConnects() {
       for (Room r : roomZ) {
         ArrayList<Door> d = r.retDoor();
@@ -499,6 +522,7 @@ private Item createRightItem(String type) {
 
     }
 
+// setting variables for another room
     private void setDirsFalse() {
        cN = false;
        cE = false;
@@ -506,6 +530,7 @@ private Item createRightItem(String type) {
        cW = false;
     }
 
+// more handling of messed up doors
     private void doTheDoors(Room r) {
       try {
           r.verifyRoom();
@@ -527,6 +552,7 @@ private Item createRightItem(String type) {
           }
     }
 
+// add a door to connect two rooms
 private void addDoorsToRooms(Room z, Room r) {
   ArrayList<Door> doorH = z.retDoor();
   final int four = 4;
@@ -543,6 +569,7 @@ private void addDoorsToRooms(Room z, Room r) {
   }
 }
 
+// adjust two doors and rooms to connect
 private void adjDoors(Door d, Door j, Room r, Room z, ArrayList<Door> doorList) {
   doorList.add(d);
   doorList.add(j);

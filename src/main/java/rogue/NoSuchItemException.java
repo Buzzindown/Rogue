@@ -2,7 +2,7 @@ package rogue;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 /**
-*no such item exception.
+*exception for when an item exists in a room with no legitimate id.
 */
 public class NoSuchItemException extends Exception {
 

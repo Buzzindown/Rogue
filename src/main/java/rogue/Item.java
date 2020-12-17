@@ -25,21 +25,21 @@ public class Item implements Serializable {
     }
 
   /**
-  * set edible.
+  * sets whether this item is edible or not.
   */
     public void setEdible() {
       edible = true;
     }
 
     /**
-    * set wearable.
+    * sets whether this item is wearable or not.
     */
     public void setWearable() {
       wearable = true;
     }
 
     /**
-    * set Tossable.
+  * sets whether this item is tossable or not.
     */
     public void setTossable() {
       tossable = true;
@@ -70,7 +70,7 @@ public class Item implements Serializable {
     }
 
     /**
-    * default wear.
+    * default wear string.
     * @return wear default string
     */
     public String wear() {
@@ -78,7 +78,7 @@ public class Item implements Serializable {
     }
 
     /**
-    * default eat.
+    * default eat string.
     * @return eat default string
     */
     public String eat() {
@@ -86,7 +86,7 @@ public class Item implements Serializable {
     }
 
     /**
-    * default toss.
+    * default toss string.
     * @return toss default string
     */
     public String toss() {
@@ -94,7 +94,7 @@ public class Item implements Serializable {
     }
 
     /**
-    *set abilities for multi implementing items.
+    *set abilities for items that might implement eating and tossing.
     */
     public void setAbilities() {
       edible = false;

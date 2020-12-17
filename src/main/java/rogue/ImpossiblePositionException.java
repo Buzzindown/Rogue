@@ -1,6 +1,6 @@
 package rogue;
 /**
-*impossible position exception.
+*Exception for impossible possitions, specifically for items placed outside of rooms.
 */
 public class ImpossiblePositionException extends Exception {
 

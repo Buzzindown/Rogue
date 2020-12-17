@@ -1,7 +1,7 @@
 package rogue;
 
 /**
-*not enoguh doors exception.
+*Exception for when a player performs an invalid move(ie into a wall).
 */
 public class InvalidMoveException extends Exception {
 

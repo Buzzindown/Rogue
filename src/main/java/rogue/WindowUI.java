@@ -82,6 +82,7 @@ Constructor.
 
     }
 
+// setup the terminal
     private void setTerminal() {
         JPanel terminalPanel = new JPanel();
         terminal = new SwingTerminal();
@@ -89,6 +90,7 @@ Constructor.
         contentPane.add(terminalPanel, BorderLayout.WEST);
     }
 
+// setting up various panels
     private void setUpPanels() {
         JPanel labelPanel = new JPanel();
         labelPanel.setBackground(Color.black);
@@ -99,6 +101,7 @@ Constructor.
         setTerminal();
     }
 
+// creating menu bar  loadnewjson has no functionality atm
     private void makeMenuBar() {
       JMenuBar menubar = new JMenuBar();
       setJMenuBar(menubar);
@@ -118,6 +121,7 @@ Constructor.
       fileMenu.add(chngPN);
     }
 
+// load a game file
     private void loadGame() {
       JFileChooser fc = new JFileChooser(".");
       fc.setApproveButtonText("Load File");
@@ -128,7 +132,7 @@ Constructor.
         tryToUnSerializeData(absPath);
       }
     }
-
+// attempt to load a saved game file
     private void tryToUnSerializeData(String path) {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(path));) {
           Rogue loadG = (Rogue) in.readObject();
@@ -144,6 +148,7 @@ Constructor.
         }
     }
 
+// save the game in a serialized file
     private void saveGame() {
       JFileChooser fc = new JFileChooser(".");
     //  fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -155,8 +160,7 @@ Constructor.
       }
     }
 
-
-
+// attemp to save the game
     private void tryToSerializeData(String path) {
       try {
         FileOutputStream outputStr = new FileOutputStream(path);
@@ -175,6 +179,7 @@ Constructor.
 
     }
 
+// change the players name
     private void changeText() {
       String namePlz;
 
@@ -188,7 +193,7 @@ Constructor.
         JOptionPane.showMessageDialog(null, "Name not set", "", JOptionPane.INFORMATION_MESSAGE);
       }
     }
-
+// setting up our inventory panel
     private void addInvPanel() {
         JPanel np = new JPanel();
         int thickness = THICK;
@@ -208,7 +213,7 @@ Constructor.
         np.add(sp, BorderLayout.CENTER);
         contentPane.add(np, BorderLayout.EAST);
     }
-
+// adjsuting our inventory panel
     private void addInventoryItem(ArrayList<Item> items) {
      listModel.clear();
       for (Item e : items) {
@@ -337,23 +342,23 @@ The controller method for making the game logic work.
 **/
 public static void main(String[] args) {
   char userInput = 'd';
-String message = "Welcome to my rogue game";
-String configurationFileLocation = "fileLocations.json";
-RogueParser parser = new RogueParser(configurationFileLocation);
-theGame = new Rogue(parser);
-Player thePlayer = new Player();
-theGame.setPlayer(thePlayer);
-WindowUI theGameUI = new WindowUI();
-theGameUI.draw(message, theGame.getNextDisplay());
-theGameUI.setVisible(true);
-pastInvSize = (theGame.getPlayer()).returnInvSize();
-  while (userInput != 'q') {
-    theGameUI.mainLoopControl(userInput, theGameUI);
-  }
-  JFrame rent = new JFrame();
-  JOptionPane.showMessageDialog(rent, "Pressed Q: game exited");
+  String message = "Welcome to my rogue game";
+  String configurationFileLocation = "fileLocations.json";
+  RogueParser parser = new RogueParser(configurationFileLocation);
+  theGame = new Rogue(parser);
+  Player thePlayer = new Player();
+  theGame.setPlayer(thePlayer);
+  WindowUI theGameUI = new WindowUI();
+  theGameUI.draw(message, theGame.getNextDisplay());
+  theGameUI.setVisible(true);
+  pastInvSize = (theGame.getPlayer()).returnInvSize();
+    while (userInput != 'q') {
+      theGameUI.mainLoopControl(userInput, theGameUI);
+    }
+    JFrame rent = new JFrame();
+    JOptionPane.showMessageDialog(rent, "Pressed Q: game exited");
 
-  System.exit(0);
+    System.exit(0);
 }
 
 private void mainLoopControl(char userInput, WindowUI theGameUI) {
