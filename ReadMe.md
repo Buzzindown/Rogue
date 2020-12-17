@@ -20,25 +20,29 @@ The main functionalities of the game are listed below.
 |Ability to change player's display name|
 
 ## Compiling with gradle
-'gradle build' 
+'''bash
+gradle build
+'''
 
 ## Running with gradle
-'gradle run' 
+'''bash
+gradle run
+''' 
 
 ## Controls
-MOVEMENT
-  UP: W
-  DOWN: S
-  LEFT: A
-  RIGHT: D
+MOVEMENT\
+  UP: W\
+  DOWN: S\
+  LEFT: A\
+  RIGHT: D\
 
-OTHER
-  EAT: J
-  WEAR: K
-  TOSS: M
+OTHER\
+  EAT: J\
+  WEAR: K\
+  TOSS: M\
 
-SELECTING ITEMS/MENUES
-  MOUSE
+SELECTING ITEMS/MENUES\
+  MOUSE\
   
 ## Next Steps
 - Adding enemies
