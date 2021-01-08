@@ -1,6 +1,6 @@
 # Game of Rogue Prototype
 This is a very simple concept version of the original game of rogue.\
-The purpose of this project was to build my skills in bbject oriented programming,\
+The purpose of this project was to build my skills in object oriented programming,\
 as well as in java. The project utilizes a swing GUI to display the program.\
 
 ## Important Notes
