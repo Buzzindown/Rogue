@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import java.io.Serializable;
 /**
- * The rogue game class.
+ * The rogue game class..
  */
 public class Rogue implements Serializable {
     private static final long serialVersionUID = 7424074459531017606L;

@@ -10,7 +10,7 @@ public class Inventory implements Serializable {
   private ArrayList<Item> items;
 
   /**
-  *default constructor.
+  *default constructor..
   */
   public Inventory() {
     items = new ArrayList<Item>();

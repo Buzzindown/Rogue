@@ -42,7 +42,7 @@ public class WindowUI extends JFrame {
     private TerminalScreen screen;
     public static final int WIDTH = 700;
     public static final int HEIGHT = 800;
-    // Screen buffer dimensions are different than terminal dimensions
+    // Screen buffer dimensions are different than terminal dimensions.
     public static final int COLS = 80;
     public static final int ROWS = 24;
     private static final int THICK = 5;

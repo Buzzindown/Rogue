@@ -3,7 +3,7 @@ package rogue;
 public class Clothing extends Item implements Wearable {
 
     /**
-    *clothing constructor.
+    *clothing constructor..
     */
     public Clothing() {
       super.setWearable();

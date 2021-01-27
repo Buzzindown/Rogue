@@ -3,7 +3,7 @@ package rogue;
 public class SmallFood extends Food implements Tossable {
 
     /**
-    *Default constructor.
+    *Default constructor..
     */
     public SmallFood() {
 

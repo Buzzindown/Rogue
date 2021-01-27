@@ -3,7 +3,7 @@ package rogue;
 public class Ring extends Magic implements Wearable {
 
   /**
-  *default constructor.
+  *default constructor..
   */
   public Ring() {
     super.setWearable();

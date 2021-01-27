@@ -6,7 +6,7 @@ package rogue;
 public class InvalidMoveException extends Exception {
 
   /**
-  *course not found.
+  *course not found..
   */
   public InvalidMoveException() {
     super("bad move.");

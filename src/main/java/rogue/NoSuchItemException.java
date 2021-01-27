@@ -7,7 +7,7 @@ import javax.swing.JOptionPane;
 public class NoSuchItemException extends Exception {
 
   /**
-  *course not found.
+  *course not found..
   */
   public NoSuchItemException() {
     super("No such item exists.");

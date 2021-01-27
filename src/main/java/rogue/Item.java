@@ -18,7 +18,7 @@ public class Item implements Serializable {
   private boolean wearable = false;
   private boolean tossable = false;
   /**
-  * default constructor.
+  * default constructor..
   */
     public Item() {
       doSomething = true;

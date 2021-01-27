@@ -39,7 +39,7 @@ public class Room implements Serializable {
   private int zz;
 /**
 *find a empty tile.
-*@return a point to move our item to
+*@return a point to move our item to.
 */
 public Point findEmptyTile() {
   Point ret = new Point(1, 1);

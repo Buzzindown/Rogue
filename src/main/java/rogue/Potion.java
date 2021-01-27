@@ -3,7 +3,7 @@ package rogue;
 public class Potion extends Magic implements Edible, Tossable {
 
     /**
-    *default constructor.
+    *default constructor..
     */
     public Potion() {
 

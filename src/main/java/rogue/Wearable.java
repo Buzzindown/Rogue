@@ -4,7 +4,7 @@ public interface Wearable {
 
   /**
   *single method.
-  *@return string for eating
+  *@return string for eating,
   */
   String wear();
 }

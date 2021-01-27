@@ -7,7 +7,7 @@ import javax.swing.JOptionPane;
 public class NotEnoughDoorsException extends Exception {
 
   /**
-  *course not found.
+  *course not found..
   */
   public NotEnoughDoorsException() {
     super("not enough doors exception.");

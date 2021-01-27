@@ -4,7 +4,7 @@ import java.io.Serializable;
 /**
  * A door in the dunegon walls.
  * doors are designed to be able to connect to more than one room,
- * that functionality isn't built in yet though.
+ * that functionality isn't built in yet though..
  */
 public class Door implements Serializable {
   private static final long serialVersionUID = -2655797264737116798L;

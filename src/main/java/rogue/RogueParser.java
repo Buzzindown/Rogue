@@ -32,7 +32,7 @@ public class RogueParser {
     private JSONObject symbolsJSON;
 
     /**
-     * Default constructor.
+     * Default constructor..
      */
     public RogueParser() {
       System.out.println("call again with a filename");

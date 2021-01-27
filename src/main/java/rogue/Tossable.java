@@ -4,7 +4,7 @@ public interface Tossable {
 
   /**
   *single method.
-  *@return string for eating
+  *@return string for eating.
   */
  String toss();
 }

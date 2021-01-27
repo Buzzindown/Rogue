@@ -13,7 +13,7 @@ public class Player implements Serializable {
     private Inventory inventory;
 
 /**
-*default constructor.
+*default constructor..
 */
     public Player() {
       Point p = new Point(1, 1);

@@ -3,7 +3,7 @@ package rogue;
 public class Food extends Item implements Edible {
 
     /**
-    *default food constructor.
+    *default food constructor..
     */
     public Food() {
       super.setEdible();

@@ -4,7 +4,7 @@ public interface Edible {
 
   /**
   *single method.
-  *@return string for eating
+  *@return string for eating.
   */
    String eat();
 }
